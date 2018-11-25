@@ -1,0 +1,10 @@
+.Breadcrumb {
+    background: gray;
+    font-size: 13px;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.Breadcrumb > span {
+    font-weight: bold;
+}
