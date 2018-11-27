@@ -2,9 +2,17 @@
     background: gray;
     font-size: 13px;
     color: #fff;
-    padding: 10px 0;
+    padding: 10px 25px;
 }
 
-.Breadcrumb > span {
+.Breadcrumb > a {
     font-weight: bold;
+    min-width: 20px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;    
+}
+
+.Breadcrumb > a:hover {
+    border-radius: 10px;
 }

@@ -1,5 +1,5 @@
 export const defaultState = {
-    currentDir: '/',
+    path: [],
     fileList: [{
         name: "documents",
         type: "dir",
@@ -11,26 +11,32 @@ export const defaultState = {
         type: "file",
     }],
     fileListFilter: null,
+    contextMenuVisible: null,
+    contextMenuPosition: [],
 };
 
-/**
- *
- * This state describes all the information the connector needs and what happen regarding this.
- * Each time the connector needs environment information,it should be supplied via this part of the state.
- * @param {object} state
- * @param {object} action
- *
- * @returns {object}
- */
 const MainReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case 'SET_DIRECTORY':
-            return Object.assign({}, state, { currentDir: action.value });
+        case 'SET_PATH':
+            return Object.assign({}, state, { path: action.value });
+        case 'ENTER_TO_DIRECTORY':
+            let path = Array.from(state.path);
+            path.push(action.value);
+            return Object.assign({}, state, { path: path });
+
         case 'SET_FILE_LIST':
             return Object.assign({}, state, { fileList: action.value });
         case 'SET_FILE_LIST_FILTER':
             return Object.assign({}, state, { 
                 fileListFilter: action.value
+            });
+        case 'SET_CONTEXT_MENU_VISIBLE':
+            return Object.assign({}, state, { 
+                contextMenuVisible: action.value
+            });
+        case 'SET_CONTEXT_MENU_POSITION':
+            return Object.assign({}, state, { 
+                contextMenuPosition: action.value
             });
 
         default:

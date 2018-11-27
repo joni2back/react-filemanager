@@ -4,33 +4,26 @@ import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
 import Breadcrumb from './Components/Breadcrumb/Breadcrumb.jsx';
-import CreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: blue,
-  },
-});
+import { connect } from 'react-redux';
+import { setContextMenuVisible } from './Actions/Actions.js';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    handleHideContextMenu() {
-        window.dispatchEvent(new window.CustomEvent('CONTEXT_MENU_HIDE'));
-    }
-
     render() {
+        const theme = createMuiTheme({
+            palette: {
+                primary: blue,
+            },
+            typography: {
+                useNextVariants: true,
+            }
+        });        
         return (
             <MuiThemeProvider theme={theme}>
-                <div className="App" onClick={this.handleHideContextMenu.bind(this)} onContextMenu={this.handleHideContextMenu.bind(this)}>
+                <div className="App" onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
                     <Navbar />
                     <Breadcrumb />
-                    <CreateFolder />
-
                     <FileList />
                     <ContextMenu />
                 </div>
@@ -39,4 +32,18 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        handleHideContextMenu: (event) => {
+            event.preventDefault();
+            dispatch(setContextMenuVisible(false));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

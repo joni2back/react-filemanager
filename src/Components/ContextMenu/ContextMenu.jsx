@@ -1,39 +1,40 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './ContextMenu.css';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Fade from '@material-ui/core/Fade';
 
 class ContextMenu extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            x: 0,
-            y: 0,
-            visible: false
-        };
-
-        window.addEventListener('CONTEXT_MENU_HIDE', this.handleHide.bind(this));
-        window.addEventListener('CONTEXT_MENU_SHOW', this.handleShow.bind(this));
-    }
-
-    handleShow(event) {
-        const { x, y } = event.detail;
-        this.setState({ visible: true, x, y });
-    }
-
-    handleHide(event) {
-        this.setState({ visible: false });
-    }
 
     render() {
         return (
-            <div className="ContextMenu" style={{top: this.state.y, left: this.state.x, display: this.state.visible ? 'block':'none'}}>
-                <ul>
-                    <li>Rename</li>
-                    <li>Delete</li>
-                </ul>
-            </div>
+            <Menu style={{top: this.props.y, left: this.props.x}}
+              id="simple-menu"
+              open={this.props.visible}
+              onClose={ () => {} }
+              PaperProps={{ style: {width: 160} }}>
+              <MenuItem>Open</MenuItem>
+              <MenuItem>Copy</MenuItem>
+              <MenuItem>Delete</MenuItem>
+            </Menu>
         );
     }
 }
 
-export default ContextMenu;
+const mapStateToProps = (state) => {
+    window.state = state;
+    return {
+        x: state.contextMenuPosition[0] -20|| 0,
+        y: state.contextMenuPosition[1] -50|| 0,
+        visible: !!state.contextMenuVisible
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu);

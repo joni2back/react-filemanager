@@ -1,17 +1,10 @@
 .File {
-    text-align: center;
-    border: 1px solid red;
-    color: #333;
+    cursor: pointer;
     float: left;
-    margin: 2px;
-    padding: 10px;
-    width: 6em;
-    user-select: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: block;
 }
 
 .File:hover {
     cursor: pointer;
-    background: gray;
+    background: #ddd;
 }

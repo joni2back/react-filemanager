@@ -22,8 +22,8 @@ export default class FormDialog extends React.Component {
 
   render() {
     return (
-      <div>
-        <Button onClick={this.handleClickOpen}>Add folder</Button>
+      <div style={{marginLeft:'1em'}}>
+        <Button color="inherit" onClick={this.handleClickOpen}>Add folder</Button>
 
         <Dialog
           open={this.state.open}

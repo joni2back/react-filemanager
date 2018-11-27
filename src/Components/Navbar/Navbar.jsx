@@ -12,6 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { setFileListFilter } from '../../Actions/Actions.js';
+import CreateFolder from '../Dialogs/CreateFolder/CreateFolder.jsx';
 
 const styles = theme => ({
   root: {
@@ -94,6 +95,7 @@ function SearchAppBar(props) {
             <InputBase
               type="search"
               placeholder="Search…"
+              value={props.value}
               onChange={props.handleChange}
               classes={{
                 root: classes.inputRoot,
@@ -103,7 +105,7 @@ function SearchAppBar(props) {
           </div>
 
 
-          <Button color="inherit">Add folder</Button>
+          <CreateFolder />
 
         </Toolbar>
       </AppBar>
@@ -112,14 +114,13 @@ function SearchAppBar(props) {
 }
 
 SearchAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
-
-
 
 
 const mapStateToProps = (state) => {
     return {
+        value: state.fileListFilter || ''
     };
 };
 
