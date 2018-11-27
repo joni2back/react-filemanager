@@ -8,3 +8,7 @@
     cursor: pointer;
     background: #ddd;
 }
+
+.File[data-selected] {
+    background: red;
+}

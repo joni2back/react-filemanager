@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {refreshFileList, enterToDirectory, setContextMenuVisible, setContextMenuPosition} from '../../Actions/Actions.js';
+import {refreshFileList, enterToDirectory, setContextMenuVisible, setContextMenuPosition, toggleSelectedFile} from '../../Actions/Actions.js';
 import './File.css';
 
 
@@ -50,22 +50,22 @@ class File extends Component {
 
         this.state = {
             name: null,
-            type: null
+            type: null,
         };
     }
 
     render() {
-        const { type, name, handleClick, handleDoubleClick, handleContextMenu } = this.props;
+        const { selected, filePath, type, name, handleClick, handleDoubleClick, handleContextMenu } = this.props;
 
         return (
-            <div className="File" onClick={handleClick} onDoubleClick={handleDoubleClick} onContextMenu={handleContextMenu}>
+            <div className="File" onClick={handleClick} onDoubleClick={handleDoubleClick} onContextMenu={handleContextMenu} data-selected={selected}>
                 <ListItem>
                     <ListItemAvatar>
                         <Avatar>
                             { type === 'dir' ? <FolderIcon /> : <FileIcon />}
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={name} secondary={type} />
+                    <ListItemText primary={name} secondary="" />
                 </ListItem>
             </div>
         );
@@ -73,19 +73,21 @@ class File extends Component {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownState) => {
     return {
+        filePath: [... state.path, ownState.name],
+        selected: state.selectedFiles.find(f => f.name === ownState.name)
     };
 };
 
-const mapDispatchToProps = (dispatch, componentState, mmm) => {
+const mapDispatchToProps = (dispatch, ownState) => {
     return {
         handleDoubleClick: (event) => {
-            if (componentState.type === 'file') {
+            if (ownState.type === 'file') {
                 return;
             }
 
-            dispatch(enterToDirectory(componentState.name));
+            dispatch(enterToDirectory(ownState.name));
             dispatch(refreshFileList());
         },
 
@@ -101,11 +103,10 @@ const mapDispatchToProps = (dispatch, componentState, mmm) => {
         },
 
         handleClick: (event) => {
+            dispatch(toggleSelectedFile(ownState));
         }
     };
 };
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(File));
 

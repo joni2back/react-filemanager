@@ -9,26 +9,26 @@ import Fade from '@material-ui/core/Fade';
 class ContextMenu extends Component {
 
     render() {
+        const { acts, y, x, visible, title } = this.props;
+        const actionsComp = acts.map((act, key) => <MenuItem key={key}>{act}</MenuItem>);
+
         return (
-            <Menu style={{top: this.props.y, left: this.props.x}}
-              id="simple-menu"
-              open={this.props.visible}
-              onClose={ () => {} }
-              PaperProps={{ style: {width: 160} }}>
-              <MenuItem>Open</MenuItem>
-              <MenuItem>Copy</MenuItem>
-              <MenuItem>Delete</MenuItem>
-            </Menu>
+            <div>
+                <Menu style={{top: y, left: x}} open={visible} onClose={ () => {} } PaperProps={{ style: {width: 160} }}>
+                    { actionsComp }
+                </Menu>
+            </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    window.state = state;
     return {
         x: state.contextMenuPosition[0] -20|| 0,
         y: state.contextMenuPosition[1] -50|| 0,
-        visible: !!state.contextMenuVisible
+        visible: !!state.contextMenuVisible,
+        title: state.selectedFiles,
+        acts: ['open', 'remove', 'view','edit', 'compress']
     };
 };
 

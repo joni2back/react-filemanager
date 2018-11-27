@@ -54,3 +54,16 @@ export const setContextMenuPosition = (x, y) => {
         value: [x, y]
     };
 };
+
+export const addSelectedFile = (name) => {
+   return {
+        type: 'ADD_SELECTED_FILE',
+        value: name
+    };
+};
+export const toggleSelectedFile = (name) => {
+   return {
+        type: 'TOGGLE_SELECTED_FILE',
+        value: name
+    };
+};
