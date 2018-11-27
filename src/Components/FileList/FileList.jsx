@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import File from '../File/File.jsx'; 
 import { connect } from 'react-redux';
 import './FileList.css';
+import Loader from '../Loader/Loader.jsx'; 
+import Notification from '../Notification/Notification.jsx'; 
 
 class FileList extends Component {
 
@@ -10,12 +12,14 @@ class FileList extends Component {
     }
 
     render() {
-        const { fileList } = this.props;
+        const { fileList, loading } = this.props;
         const fileListComponent = fileList.map((file, key) => {
             return <File type={file.type} name={file.name} key={key} />
         });
+
         return <div className="FileList">
-            {fileListComponent}
+            <Notification />
+            {loading ? <Loader /> : fileListComponent}
         </div>
     }
 }
@@ -24,6 +28,7 @@ class FileList extends Component {
 const mapStateToProps = (state) => {
     return {
         fileList: state.fileList.filter(file => state.fileListFilter ? file.name.match(state.fileListFilter) : true),
+        loading: state.loading
     };
 };
 

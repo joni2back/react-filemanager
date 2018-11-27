@@ -7,10 +7,11 @@ import Breadcrumb from './Components/Breadcrumb/Breadcrumb.jsx';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { connect } from 'react-redux';
-import { setContextMenuVisible } from './Actions/Actions.js';
+import { setContextMenuVisible, refreshFileList } from './Actions/Actions.js';
 
 class App extends Component {
     render() {
+        const { loading } = this.props;
         const theme = createMuiTheme({
             palette: {
                 primary: blue,
@@ -18,7 +19,7 @@ class App extends Component {
             typography: {
                 useNextVariants: true,
             }
-        });        
+        });
         return (
             <MuiThemeProvider theme={theme}>
                 <div className="App" onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
@@ -34,10 +35,12 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        loading: state.loading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
+    dispatch(refreshFileList());
     return {
         handleHideContextMenu: (event) => {
             event.preventDefault();

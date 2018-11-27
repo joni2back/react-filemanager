@@ -1,19 +1,12 @@
 export const defaultState = {
     path: [],
-    fileList: [{
-        name: "documents",
-        type: "dir",
-    }, {
-        name: "video.avi",
-        type: "file",
-    }, {
-        name: "foto.jpg",
-        type: "file",
-    }],
+    fileList: [],
     fileListFilter: null,
     contextMenuVisible: null,
     contextMenuPosition: [],
     selectedFiles: [],
+    loading: false,
+    errorMsg: null,
 };
 
 const MainReducer = (state = defaultState, action) => {
@@ -53,6 +46,14 @@ const MainReducer = (state = defaultState, action) => {
                 selectedFiles: state.selectedFiles.find(f => f.name === action.value.name) ?
                     state.selectedFiles.filter(f => f.name !== action.value.name) :
                     [...state.selectedFiles, action.value]
+            });
+        case 'SET_LOADING':
+            return Object.assign({}, state, { 
+                loading: action.value
+            });
+        case 'SET_ERROR_MSG':
+            return Object.assign({}, state, { 
+                errorMsg: action.value
             });
 
         default:

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {refreshFileList, enterToDirectory, setContextMenuVisible, setContextMenuPosition, toggleSelectedFile} from '../../Actions/Actions.js';
 import './File.css';
 
-
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -22,7 +21,6 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import DeleteIcon from '@material-ui/icons/Delete';
-
 
 const styles = theme => ({
   root: {

@@ -1,3 +1,7 @@
+import ApiHandler from '../Api/ApiHandler.js';
+import { getFileList } from '../Api/ApiHandler.js';
+
+
 export const setPath = (path) => {
    return {
         type: 'SET_PATH',
@@ -12,20 +16,22 @@ export const enterToDirectory = (directory) => {
     };
 };
 
-export const refreshFileList = () => {
-    return setFileList([{
-            name: btoa(Math.random() + new Date().toTimeString()).substring(0, 10),
-            type: "dir",
-        }, {
-            name: btoa(Math.random() + new Date().toTimeString()).substring(0, 10),
-            type: "file",
-        }, {
-            name: btoa(Math.random() + new Date().toTimeString()).substring(0, 10),
-            type: "file",
-        }]
-    );
-};
+export const refreshFileList = () => (dispatch, getState) => {
+    const { path } = getState();
+    dispatch(setLoading(true));
 
+    getFileList(path.join('/')).then(r => {
+        dispatch(setLoading(false));
+        dispatch(setFileList(r));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+
+};
 
 export const setFileList = (fileList) => {
    return {
@@ -61,9 +67,17 @@ export const addSelectedFile = (name) => {
         value: name
     };
 };
+
 export const toggleSelectedFile = (name) => {
    return {
         type: 'TOGGLE_SELECTED_FILE',
         value: name
+    };
+};
+
+export const setLoading = (value) => {
+   return {
+        type: 'SET_LOADING',
+        value: value
     };
 };
