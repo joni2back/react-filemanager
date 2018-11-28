@@ -2,13 +2,21 @@
     cursor: pointer;
     float: left;
     display: block;
+    width: 100%;
+    user-select: none;
 }
 
 .File:hover {
     cursor: pointer;
-    background: #ddd;
+    background: #fafafa;
 }
 
 .File[data-selected] {
-    background: red;
+    background-color: #e8f0fe;
+    
+}
+
+.File[data-selected],
+.File[data-selected] > li > div > span {
+    color: #1967d2;
 }

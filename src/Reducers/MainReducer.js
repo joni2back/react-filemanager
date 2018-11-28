@@ -4,6 +4,7 @@ export const defaultState = {
     fileListFilter: null,
     contextMenuVisible: null,
     contextMenuPosition: [],
+    contextMenuPositionElement: null,
     selectedFiles: [],
     loading: false,
     errorMsg: null,
@@ -32,6 +33,10 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_CONTEXT_MENU_POSITION':
             return Object.assign({}, state, { 
                 contextMenuPosition: action.value
+            });
+        case 'SET_CONTEXT_MENU_POSITION_ELEMENT':
+            return Object.assign({}, state, { 
+                contextMenuPositionElement: action.value
             });
         case 'SET_SELECTED_FILES':
             return Object.assign({}, state, { 

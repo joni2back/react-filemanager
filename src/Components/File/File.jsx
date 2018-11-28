@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {refreshFileList, enterToDirectory, setContextMenuVisible, setContextMenuPosition, toggleSelectedFile} from '../../Actions/Actions.js';
+import {
+    refreshFileList, enterToDirectory, setContextMenuVisible, 
+    setContextMenuPosition, toggleSelectedFile, setContextMenuPositionElement
+} from '../../Actions/Actions.js';
 import './File.css';
 
 import PropTypes from 'prop-types';
@@ -98,6 +101,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
 
             dispatch(setContextMenuVisible(true));
             dispatch(setContextMenuPosition(x, y));
+            dispatch(setContextMenuPositionElement(event.currentTarget));
         },
 
         handleClick: (event) => {
