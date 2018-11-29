@@ -8,7 +8,9 @@ export const defaultState = {
     selectedFiles: [],
     loading: false,
     errorMsg: null,
-    visibleModalCreateFolder: false
+    visibleModalCreateFolder: false,
+    visibleModalFileContent: false,
+    fileContentBlobUrl: null
 };
 
 /**
@@ -71,6 +73,20 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_VISIBLE_MODAL_CREATE_FOLDER':
             return Object.assign({}, state, { 
                 visibleModalCreateFolder: !!action.value
+            });
+
+        case 'SET_VISIBLE_MODAL_FILE_CONTENT':
+            return Object.assign({}, state, { 
+                visibleModalFileContent: !!action.value
+            });
+
+        case 'SET_FILE_CONTENT':
+            /**
+             * Removing old blob url
+             */
+            state.fileContentBlobUrl && URL.revokeObjectURL(state.fileContentBlobUrl);
+            return Object.assign({}, state, { 
+                fileContentBlobUrl: action.value ? URL.createObjectURL(action.value) : null
             });
 
         default:

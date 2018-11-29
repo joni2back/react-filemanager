@@ -4,6 +4,7 @@ import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
 import Breadcrumb from './Components/Breadcrumb/Breadcrumb.jsx';
+import DialogFileContent from './Components/Dialogs/FileContent/FileContent.jsx';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { connect } from 'react-redux';
@@ -26,6 +27,7 @@ class App extends Component {
                     <Navbar />
                     <Breadcrumb />
                     <FileList />
+                    <DialogFileContent />
                     <ContextMenu />
                 </div>
             </MuiThemeProvider>

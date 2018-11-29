@@ -27,10 +27,11 @@ class FileList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        fileList: state.fileList.filter(file => state.fileListFilter ? file.name.match(state.fileListFilter) : true),
+        fileList: state.fileList.filter(file => state.fileListFilter ? file.name.toLocaleLowerCase().match(state.fileListFilter.toLocaleLowerCase()) : true),
         loading: state.loading
     };
 };
+
 
 const mapDispatchToProps = (dispatch) => {
     return {

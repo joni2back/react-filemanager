@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     refreshFileList, enterToDirectory, setContextMenuVisible, 
     setContextMenuPosition, toggleSelectedFile, setContextMenuPositionElement,
-    setSelectedFileFromLastTo
+    setSelectedFileFromLastTo, getFileContent, rightClickOnFile
 } from '../../Actions/Actions.js';
 import './File.css';
 
@@ -91,6 +91,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
          */
         handleDoubleClick: (event) => {
             if (ownState.type === 'file') {
+                dispatch(getFileContent(ownState.name));
                 return;
             }
             dispatch(enterToDirectory(ownState.name));
@@ -108,6 +109,12 @@ const mapDispatchToProps = (dispatch, ownState) => {
             let x = event.clientX || (event.touches && event.touches[0].pageX);
             let y = event.clientY || (event.touches && event.touches[0].pageY);
 
+            if (event.shiftKey) {
+                dispatch(setSelectedFileFromLastTo(ownState));
+            } else {
+                dispatch(rightClickOnFile(ownState));
+            }
+            
             dispatch(setContextMenuVisible(true));
             //dispatch(setContextMenuPosition(x, y));
             dispatch(setContextMenuPositionElement(event.currentTarget));

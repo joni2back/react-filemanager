@@ -25,3 +25,13 @@ export function createDirectory(path, directory) {
         })
     });
 };
+
+
+/**
+ * Fetch API to get file body
+ * @param {String} path
+ * @returns {Object}
+ */
+export function getFileContent(path) {
+    return fetch('http://localhost:8000/filemanager/content/file?path=' + (encodeURIComponent(path) || '/'));
+};

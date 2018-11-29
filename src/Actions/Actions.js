@@ -1,4 +1,4 @@
-import { getFileList, createFolder } from '../Api/ApiHandler.js';
+import { getFileList, createFolder, getFileBody } from '../Api/ApiHandler.js';
 
 
 /**
@@ -21,6 +21,29 @@ export const refreshFileList = () => (dispatch, getState) => {
     });
 };
 
+
+/**
+ * Request API to get file content then dispatch defined events
+ * @param {String} fileName
+ * @returns {Function}
+ */
+export const getFileContent = (fileName) => (dispatch, getState) => {
+    const { path } = getState();
+
+    dispatch(setLoading(true));
+    dispatch(setFileContent(null));
+    dispatch(setVisibleModalFileContent(true));
+    getFileBody(path.join('/'), fileName).then(blob => {
+        dispatch(setFileContent(blob));
+        dispatch(setLoading(false));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
 
 /**
  * Request API to create a folder then dispatch defined events
@@ -75,78 +98,103 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
 };
 
 export const setPath = (path) => {
-   return {
+    return {
         type: 'SET_PATH',
         value: path
     };
 };
 
 export const enterToDirectory = (directory) => {
-   return {
+    return {
         type: 'ENTER_TO_DIRECTORY',
         value: directory
     };
 };
 
 export const setFileList = (fileList) => {
-   return {
+    return {
         type: 'SET_FILE_LIST',
         value: fileList
     };
 };
 
 export const setFileListFilter = (search) => {
-   return {
+    return {
         type: 'SET_FILE_LIST_FILTER',
         value: search
     };
 };
 
 export const setContextMenuVisible = (visible) => {
-   return {
+    return {
         type: 'SET_CONTEXT_MENU_VISIBLE',
         value: !!visible
     };
 };
 
 export const setContextMenuPosition = (x, y) => {
-   return {
+    return {
         type: 'SET_CONTEXT_MENU_POSITION',
         value: [x, y]
     };
 };
 
 export const setContextMenuPositionElement = (element) => {
-   return {
+    return {
         type: 'SET_CONTEXT_MENU_POSITION_ELEMENT',
         value: element
     };
 };
 
-export const addSelectedFile = (name) => {
-   return {
+export const addSelectedFile = (file) => {
+    return {
         type: 'ADD_SELECTED_FILE',
-        value: name
+        value: file
     };
 };
 
-export const toggleSelectedFile = (name) => {
-   return {
+export const toggleSelectedFile = (file) => {
+    return {
         type: 'TOGGLE_SELECTED_FILE',
-        value: name
+        value: file
     };
+};
+
+export const rightClickOnFile = (file) => (dispatch, getState) => {
+    const { selectedFiles } = getState();
+    const isSelected = selectedFiles.indexOf(selectedFiles.find(f => f.name == file.name)) != -1;
+
+    !isSelected && dispatch({
+        type: 'SET_SELECTED_FILES',
+        value: [file]
+    });
 };
 
 export const setLoading = (value) => {
-   return {
+    return {
         type: 'SET_LOADING',
         value: value
     };
 };
 
 export const setVisibleModalCreateFolder = (visible) => {
-   return {
+    return {
         type: 'SET_VISIBLE_MODAL_CREATE_FOLDER',
         value: !!visible
+    };
+};
+
+export const setVisibleModalFileContent = (visible) => {
+    return {
+        type: 'SET_VISIBLE_MODAL_FILE_CONTENT',
+        value: !!visible
+    };
+};
+
+
+export const setFileContent = (blob) => {
+   return {
+        type: 'SET_FILE_CONTENT',
+        value: blob
     };
 };

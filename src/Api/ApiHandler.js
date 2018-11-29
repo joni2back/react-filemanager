@@ -1,4 +1,4 @@
-import { list, createDirectory } from './Api.js';
+import { list, createDirectory, getFileContent } from './Api.js';
 
 /**
  * Wrap API response for retrive file liest
@@ -15,6 +15,27 @@ export const getFileList = (path) => {
             return r.json();
         }).then(json => {
             resolve(json);
+        }).catch(r => {
+            return reject(r);
+        });
+    })
+};
+
+/**
+ * Wrap API response for retrive file content
+ * @param {String} path
+ * @returns {Object}
+ */
+export const getFileBody = (path, filename) => {
+    path = '/' + path + '/' + filename;
+    return new Promise((resolve, reject) => {
+        return getFileContent(path).then(r => {
+            if (! r.ok) {
+                return reject(r);
+            }
+            return r.blob();
+        }).then(blob => {
+            resolve(blob);
         }).catch(r => {
             return reject(r);
         });
