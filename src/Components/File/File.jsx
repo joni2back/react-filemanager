@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     refreshFileList, enterToDirectory, setContextMenuVisible, 
-    setContextMenuPosition, toggleSelectedFile, setContextMenuPositionElement
+    setContextMenuPosition, toggleSelectedFile, setContextMenuPositionElement,
+    setSelectedFileFromLastTo
 } from '../../Actions/Actions.js';
 import './File.css';
 
@@ -83,15 +84,23 @@ const mapStateToProps = (state, ownState) => {
 
 const mapDispatchToProps = (dispatch, ownState) => {
     return {
+
+        /**
+         * @param {Object} event
+         * @returns {undefined}
+         */
         handleDoubleClick: (event) => {
             if (ownState.type === 'file') {
                 return;
             }
-
             dispatch(enterToDirectory(ownState.name));
             dispatch(refreshFileList());
         },
 
+        /**
+         * @param {Object} event
+         * @returns {undefined}
+         */
         handleContextMenu: (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -100,12 +109,27 @@ const mapDispatchToProps = (dispatch, ownState) => {
             let y = event.clientY || (event.touches && event.touches[0].pageY);
 
             dispatch(setContextMenuVisible(true));
-            dispatch(setContextMenuPosition(x, y));
+            //dispatch(setContextMenuPosition(x, y));
             dispatch(setContextMenuPositionElement(event.currentTarget));
         },
 
+        /**
+         * @param {Object} event
+         * @returns {undefined}
+         */
         handleClick: (event) => {
-            dispatch(toggleSelectedFile(ownState));
+            event.stopPropagation();
+
+            if (event.ctrlKey) {
+                dispatch(toggleSelectedFile(ownState));
+            } else if (event.shiftKey) {
+                dispatch(setSelectedFileFromLastTo(ownState));
+            } else {
+                dispatch({
+                    type: 'SET_SELECTED_FILES',
+                    value: [ownState]
+                });
+            }
         }
     };
 };

@@ -8,8 +8,15 @@ export const defaultState = {
     selectedFiles: [],
     loading: false,
     errorMsg: null,
+    visibleModalCreateFolder: false
 };
 
+/**
+ * Main content reducer
+ * @param {Object} state
+ * @param {Object} action
+ * @returns {Object}
+ */
 const MainReducer = (state = defaultState, action) => {
     switch (action.type) {
         case 'SET_PATH':
@@ -59,6 +66,11 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_ERROR_MSG':
             return Object.assign({}, state, { 
                 errorMsg: action.value
+            });
+
+        case 'SET_VISIBLE_MODAL_CREATE_FOLDER':
+            return Object.assign({}, state, { 
+                visibleModalCreateFolder: !!action.value
             });
 
         default:

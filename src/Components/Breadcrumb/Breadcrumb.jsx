@@ -28,13 +28,19 @@ class Breadcrumb extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleClick: (event, index, path) => {
-            event.preventDefault();
 
+        /**
+         * @param {Object} event
+         * @param {Number} index
+         * @param {Array} path
+         * @returns {undefined}
+         */
+        handleClick: (event, index, path) => {
             let newPath = Array.from(path);
-            newPath.splice(++index)
+            newPath.splice(++index);
             dispatch(setPath(newPath));
             dispatch(refreshFileList());
+            event.preventDefault();
         },
     };
 };
