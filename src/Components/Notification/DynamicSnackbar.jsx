@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,23 +12,7 @@ const styles = theme => ({
   },
 });
 
-class SimpleSnackbar extends React.Component {
-  state = {
-    open: true,
-  };
-
-  handleClick = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
-
+class DynamicSnackbar extends React.Component {
   render() {
     const { classes, errorMsg, handleClose, open, notificationDuration } = this.props;
     return (
@@ -57,7 +40,7 @@ class SimpleSnackbar extends React.Component {
   }
 }
 
-SimpleSnackbar.propTypes = {
+DynamicSnackbar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -81,5 +64,5 @@ const mapDispatchToProps = (dispatch, ownState) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SimpleSnackbar));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DynamicSnackbar));
 

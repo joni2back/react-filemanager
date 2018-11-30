@@ -77,8 +77,8 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
     const { fileList, selectedFiles } = getState();
 
     const lastPreviouslySelected = [...selectedFiles].pop();
-    const lastPreviouslySelectedIndex = fileList.indexOf(fileList.find(f => f.name == lastPreviouslySelected.name))
-    const lastSelectedIndex = fileList.indexOf(fileList.find(f => f.name == lastFile.name))
+    const lastPreviouslySelectedIndex = fileList.indexOf(fileList.find(f => f.name === lastPreviouslySelected.name))
+    const lastSelectedIndex = fileList.indexOf(fileList.find(f => f.name === lastFile.name))
 
     let toAdd = [];
     if (lastSelectedIndex > lastPreviouslySelectedIndex) {
@@ -162,7 +162,7 @@ export const toggleSelectedFile = (file) => {
 
 export const rightClickOnFile = (file) => (dispatch, getState) => {
     const { selectedFiles } = getState();
-    const isSelected = selectedFiles.indexOf(selectedFiles.find(f => f.name == file.name)) != -1;
+    const isSelected = selectedFiles.indexOf(selectedFiles.find(f => f.name === file.name)) !== -1;
 
     !isSelected && dispatch({
         type: 'SET_SELECTED_FILES',

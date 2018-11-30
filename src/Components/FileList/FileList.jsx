@@ -3,14 +3,9 @@ import File from '../File/File.jsx';
 import { connect } from 'react-redux';
 import './FileList.css';
 import Loader from '../Loader/Loader.jsx'; 
-import Notification from '../Notification/Notification.jsx'; 
+import NotificationBar from '../Notification/NotificationBar.jsx'; 
 
 class FileList extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const { fileList, loading } = this.props;
         const fileListComponent = fileList.map((file, key) => {
@@ -18,8 +13,9 @@ class FileList extends Component {
         });
 
         return <div className="FileList">
-            <Notification />
-            {loading ? <Loader /> : fileListComponent}
+            <NotificationBar />
+            { fileListComponent.length ? '' : '' }
+            { loading ? <Loader /> : fileListComponent }
         </div>
     }
 }

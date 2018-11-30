@@ -9,10 +9,9 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { setFileListFilter } from '../../Actions/Actions.js';
-import CreateFolder from '../Dialogs/CreateFolder/CreateFolder.jsx';
+import ThreeDotsMenu from './ThreeDotsMenu.jsx';
 
 const styles = theme => ({
   root: {
@@ -93,7 +92,6 @@ function SearchAppBar(props) {
               <SearchIcon />
             </div>
             <InputBase
-              type="search"
               placeholder="Search…"
               value={props.value}
               onChange={props.handleChange}
@@ -103,10 +101,7 @@ function SearchAppBar(props) {
               }}
             />
           </div>
-
-
-          <CreateFolder />
-
+          <ThreeDotsMenu />
         </Toolbar>
       </AppBar>
     </div>

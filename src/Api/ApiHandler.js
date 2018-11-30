@@ -1,5 +1,10 @@
 import { list, createDirectory, getFileContent } from './Api.js';
 
+const messageTranslation = {
+    'TypeError: Failed to fetch': 'The connector is not responding',
+};
+
+
 /**
  * Wrap API response for retrive file liest
  * @param {String} path
@@ -16,7 +21,7 @@ export const getFileList = (path) => {
         }).then(json => {
             resolve(json);
         }).catch(r => {
-            return reject(r);
+            return reject(messageTranslation[r] || r);
         });
     })
 };
@@ -37,7 +42,7 @@ export const getFileBody = (path, filename) => {
         }).then(blob => {
             resolve(blob);
         }).catch(r => {
-            return reject(r);
+            return reject(messageTranslation[r] || r);
         });
     })
 };
@@ -59,7 +64,7 @@ export const createFolder = (path, folder) => {
         }).then(json => {
             resolve(json);
         }).catch(r => {
-            return reject(r);
+            return reject(messageTranslation[r] || r);
         });
     })
 };

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
 import { setVisibleModalFileContent } from '../../../Actions/Actions.js';
@@ -19,12 +17,14 @@ class FormDialog extends Component {
 
     componentDidUpdate() {
         if (this.props.blobUrl !== this.state.lastBlobUrl) {
-            this.state.lastBlobUrl = this.props.blobUrl;
+            this.setState({
+                lastBlobUrl: this.props.blobUrl
+            });
             this.setState({
                 loading: true
             });
 
-            this.state.lastBlobUrl && fetch(this.state.lastBlobUrl).then(r => {
+            this.props.blobUrl && fetch(this.props.blobUrl).then(r => {
                 return r.text();
             }).then(t => {
                 this.setState({
@@ -49,7 +49,7 @@ class FormDialog extends Component {
             >
               <DialogTitle id="form-dialog-title">File Content</DialogTitle>
               <DialogContent>
-                {this.state.loading ? '...' : this.state.content}
+                {this.state.loading ? 'Loading...' : this.state.content}
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary" type="button">

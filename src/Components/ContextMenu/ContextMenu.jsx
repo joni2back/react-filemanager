@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ContextMenu.css';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { getActionsByFile } from '../../Api/ApiHandler.js';
@@ -10,7 +9,7 @@ import OpenAction from './ContextMenuActions/OpenAction.jsx';
 class ContextMenu extends Component {
 
     render() {
-        const { anchorEl, acts, y, x, visible } = this.props;
+        const { anchorEl, acts, visible } = this.props;
         const actionsComp = acts.map((act, key) => {
             if (act === 'open') {
                 return <OpenAction key={key} />;

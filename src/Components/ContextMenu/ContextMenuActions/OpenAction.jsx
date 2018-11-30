@@ -1,6 +1,5 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFileContent, enterToDirectory, refreshFileList } from '../../../Actions/Actions.js';
 

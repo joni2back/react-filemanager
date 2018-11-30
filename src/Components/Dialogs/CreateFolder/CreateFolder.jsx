@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
 import { createNewFolder, setVisibleModalCreateFolder } from '../../../Actions/Actions.js';
@@ -12,29 +11,26 @@ import { createNewFolder, setVisibleModalCreateFolder } from '../../../Actions/A
 class FormDialog extends Component {
 
     render() {
-        const { handleChange, handleClose, handleOpen, handleSave, value, open } = this.props;
+        const { handleChange, handleClose, handleSave, value, open } = this.props;
 
         return (
-          <div style={{marginLeft:'1em'}}>
-            <Button color="inherit" onClick={handleOpen}>Add folder</Button>
             <Dialog
               open={open}
               onClose={handleClose}
-              aria-labelledby="form-dialog-title"
-            >
+              aria-labelledby="form-dialog-title">
                 <form onSubmit={handleSave}>
                   <DialogTitle id="form-dialog-title">Create folder</DialogTitle>
                   <DialogContent>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="name"
-                          label="Filename"
-                          type="text"
-                          value={value}
-                          onChange={handleChange}
-                          fullWidth
-                        />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Filename"
+                      type="text"
+                      value={value}
+                      onChange={handleChange}
+                      fullWidth
+                    />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} color="primary" type="button">
@@ -46,7 +42,6 @@ class FormDialog extends Component {
                   </DialogActions>
                 </form>
             </Dialog>
-          </div>
         );
     }
 }
@@ -62,9 +57,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
             dispatch(setVisibleModalCreateFolder(false));
-        },
-        handleOpen: (event) => {
-            dispatch(setVisibleModalCreateFolder(true));
         },
         handleSave: (event) => {
             const folderName = event.currentTarget.form.querySelector('input').value;
