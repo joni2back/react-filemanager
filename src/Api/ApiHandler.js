@@ -1,4 +1,4 @@
-import { list, createDirectory, getFileContent } from './Api.js';
+import { list, createDirectory, getFileContent, remove } from './Api.js';
 
 const messageTranslation = {
     'TypeError: Failed to fetch': 'Cannot get a response from connector.',
@@ -57,6 +57,29 @@ export const createFolder = (path, folder) => {
     path = '/' + path;
     return new Promise((resolve, reject) => {
         return createDirectory(path, folder).then(r => {
+            if (! r.ok) {
+                return reject(r);
+            }
+            return r.json();
+        }).then(json => {
+            resolve(json);
+        }).catch(r => {
+            return reject(messageTranslation[r] || r);
+        });
+    })
+};
+
+/**
+ * Wrap API response for remove file or folder
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export const removeFile = (path, filenames, recursive = true) => {
+    path = '/' + path;
+    return new Promise((resolve, reject) => {
+        return remove(path, filenames, recursive).then(r => {
             if (! r.ok) {
                 return reject(r);
             }

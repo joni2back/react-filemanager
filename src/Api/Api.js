@@ -37,3 +37,23 @@ export function createDirectory(path, directory) {
 export function getFileContent(path) {
     return fetch(config.url_get_content + '?path=' + (encodeURIComponent(path) || '/'));
 };
+
+
+/**
+ * Fetch API to remove a file or folder
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export function remove(path, filenames, recursive = true) {
+    return fetch(config.url_remove, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            path, filenames, recursive
+        })
+    });
+};

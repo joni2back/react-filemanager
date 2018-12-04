@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ContextMenu.css';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import MeuItem from '@material-ui/core/MenuItem';
 import { getActionsByFile } from '../../Api/ApiHandler.js';
 import OpenAction from './ContextMenuActions/OpenAction.jsx';
+import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
 
 class ContextMenu extends Component {
 
@@ -14,7 +15,9 @@ class ContextMenu extends Component {
             if (act === 'open') {
                 return <OpenAction key={key} />;
             }
-            return <MenuItem key={key}>{act}</MenuItem>;
+            if (act === 'remove') {
+                return <RemoveAction key={key} />;
+            }
         });
 
         return (

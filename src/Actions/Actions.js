@@ -1,4 +1,4 @@
-import { getFileList, createFolder, getFileBody } from '../Api/ApiHandler.js';
+import { getFileList, createFolder, getFileBody, removeFile } from '../Api/ApiHandler.js';
 
 
 /**
@@ -8,6 +8,7 @@ import { getFileList, createFolder, getFileBody } from '../Api/ApiHandler.js';
 export const refreshFileList = () => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
+    dispatch(setSelectedFiles([]));
 
     getFileList(path.join('/')).then(r => {
         dispatch(setLoading(false));
@@ -45,6 +46,7 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
     });
 };
 
+
 /**
  * Request API to create a folder then dispatch defined events
  * @param {String} createFolderName
@@ -56,6 +58,29 @@ export const createNewFolder = (createFolderName) => (dispatch, getState) => {
 
     createFolder(path.join('/'), createFolderName).then(r => {
         dispatch(setVisibleModalCreateFolder(false));
+        dispatch(setLoading(false));
+        dispatch(refreshFileList());
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
+
+
+/**
+ * Request API to create a folder then dispatch defined events
+ * @param {Array} filenames
+ * @returns {Function}
+ */
+export const removeItems = (files) => (dispatch, getState) => {
+    const { path } = getState();
+    const filenames = files.map(f => f.name);
+
+    dispatch(setLoading(true));
+    removeFile(path.join('/'), filenames).then(r => {
         dispatch(setLoading(false));
         dispatch(refreshFileList());
     }).catch(r => {
@@ -90,11 +115,7 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
             return fileList.indexOf(index) >= lastSelectedIndex && fileList.indexOf(index) <= lastPreviouslySelectedIndex
         });
     }
-
-    dispatch({
-        type: 'SET_SELECTED_FILES',
-        value: [...selectedFiles, ...toAdd]
-    });
+    dispatch(setSelectedFiles([...selectedFiles, ...toAdd]));
 };
 
 export const setPath = (path) => {
@@ -115,6 +136,13 @@ export const setFileList = (fileList) => {
     return {
         type: 'SET_FILE_LIST',
         value: fileList
+    };
+};
+
+export const setSelectedFiles = (files) => {
+    return {
+        type: 'SET_SELECTED_FILES',
+        value: files
     };
 };
 
@@ -146,13 +174,6 @@ export const setContextMenuPositionElement = (element) => {
     };
 };
 
-export const addSelectedFile = (file) => {
-    return {
-        type: 'ADD_SELECTED_FILE',
-        value: file
-    };
-};
-
 export const toggleSelectedFile = (file) => {
     return {
         type: 'TOGGLE_SELECTED_FILE',
@@ -164,10 +185,7 @@ export const rightClickOnFile = (file) => (dispatch, getState) => {
     const { selectedFiles } = getState();
     const isSelected = selectedFiles.indexOf(selectedFiles.find(f => f.name === file.name)) !== -1;
 
-    !isSelected && dispatch({
-        type: 'SET_SELECTED_FILES',
-        value: [file]
-    });
+    !isSelected && dispatch(setSelectedFiles([file]));
 };
 
 export const setLoading = (value) => {

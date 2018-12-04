@@ -48,12 +48,8 @@ const MainReducer = (state = defaultState, action) => {
                 contextMenuPositionElement: action.value
             });
         case 'SET_SELECTED_FILES':
-            return Object.assign({}, state, { 
-                selectedFiles: action.value
-            });
-        case 'ADD_SELECTED_FILE':
-            return Object.assign({}, state, { 
-                selectedFiles: [...state.selectedFiles, action.value]
+            return Object.assign({}, state, {
+                selectedFiles: (action.value).filter((f, i, self) => self.map(ff => ff.name).indexOf(f.name) === i)
             });
         case 'TOGGLE_SELECTED_FILE':
             return Object.assign({}, state, {

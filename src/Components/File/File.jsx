@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     refreshFileList, enterToDirectory, setContextMenuVisible, 
     toggleSelectedFile, setContextMenuPositionElement,
-    setSelectedFileFromLastTo, getFileContent, rightClickOnFile
+    setSelectedFileFromLastTo, getFileContent, rightClickOnFile, setSelectedFiles
 } from '../../Actions/Actions.js';
 import './File.css';
 
@@ -114,10 +114,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
             } else if (event.shiftKey) {
                 dispatch(setSelectedFileFromLastTo(ownState));
             } else {
-                dispatch({
-                    type: 'SET_SELECTED_FILES',
-                    value: [ownState]
-                });
+                dispatch(setSelectedFiles([ownState]));
             }
         }
     };
