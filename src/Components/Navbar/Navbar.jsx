@@ -12,6 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
 import { setFileListFilter } from '../../Actions/Actions.js';
 import ThreeDotsMenu from './ThreeDotsMenu.jsx';
+import BreadcrumbText from '../Breadcrumb/BreadcrumbText.jsx';
 
 const styles = theme => ({
   root: {
@@ -74,16 +75,13 @@ const styles = theme => ({
 });
 
 function SearchAppBar(props) {
-  const { classes } = props;
+    const { classes } = props;
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-            <MenuIcon />
-          </IconButton>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            React Filemanager
+            <BreadcrumbText />
           </Typography>
           <div className={classes.grow} />
 
@@ -115,7 +113,7 @@ SearchAppBar.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        value: state.fileListFilter || ''
+        value: state.fileListFilter || '',
     };
 };
 

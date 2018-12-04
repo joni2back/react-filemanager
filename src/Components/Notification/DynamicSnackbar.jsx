@@ -49,7 +49,7 @@ const mapStateToProps = (state, ownState) => {
     return {
         open: !!state.errorMsg,
         errorMsg: state.errorMsg,
-        notificationDuration: state.notificationDuration || 15000
+        notificationDuration: state.notificationDuration || 60000
     };
 };
 

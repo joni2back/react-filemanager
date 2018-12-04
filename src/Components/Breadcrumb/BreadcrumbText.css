@@ -1,0 +1,13 @@
+.BreadcrumbText {
+}
+
+.BreadcrumbText > span,
+.BreadcrumbText > a {
+    cursor: pointer;
+    text-overflow: ellipsis;
+}
+
+.BreadcrumbText > span:hover,
+.BreadcrumbText > a:hover {
+    color: #efefef;
+}

@@ -3,7 +3,6 @@ import File from '../File/File.jsx';
 import { connect } from 'react-redux';
 import './FileList.css';
 import Loader from '../Loader/Loader.jsx'; 
-import NotificationBar from '../Notification/NotificationBar.jsx'; 
 
 class FileList extends Component {
     render() {
@@ -11,11 +10,15 @@ class FileList extends Component {
         const fileListComponent = fileList.map((file, key) => {
             return <File type={file.type} name={file.name} key={key} />
         });
+        const fileListEmptyComponent = (
+            <div style={{margin:20}}>No files in this folder</div>
+        );
 
         return <div className="FileList">
-            <NotificationBar />
-            { fileListComponent.length ? '' : '' }
-            { loading ? <Loader /> : fileListComponent }
+            { loading ? 
+                <Loader /> : 
+                fileListComponent.length ? fileListComponent : fileListEmptyComponent
+            }
         </div>
     }
 }

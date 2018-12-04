@@ -11,6 +11,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { connect } from 'react-redux';
 import { setContextMenuVisible, refreshFileList } from './Actions/Actions.js';
+import DynamicSnackbar from './Components/Notification/DynamicSnackbar.jsx'; 
 
 class App extends Component {
     render() {
@@ -31,6 +32,7 @@ class App extends Component {
                     <DialogFileContent />
                     <DialogCreateFolder />
                     <ContextMenu />
+                    <DynamicSnackbar />
                 </div>
             </MuiThemeProvider>
         );

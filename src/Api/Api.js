@@ -1,10 +1,12 @@
+import config from './../config.js';
+
 /**
  * Fetch API to list files from directory
  * @param {String} path
  * @returns {Object}
  */
 export function list(path) {
-    return fetch('http://localhost:8000/filemanager/list?path=' + (encodeURIComponent(path) || '/'));
+    return fetch(config.url_list + '?path=' + (encodeURIComponent(path) || '/'));
 };
 
 
@@ -15,7 +17,7 @@ export function list(path) {
  * @returns {Object}
  */
 export function createDirectory(path, directory) {
-    return fetch('http://localhost:8000/filemanager/create/dir', {
+    return fetch(config.url_create_folder, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -33,5 +35,5 @@ export function createDirectory(path, directory) {
  * @returns {Object}
  */
 export function getFileContent(path) {
-    return fetch('http://localhost:8000/filemanager/content/file?path=' + (encodeURIComponent(path) || '/'));
+    return fetch(config.url_get_content + '?path=' + (encodeURIComponent(path) || '/'));
 };

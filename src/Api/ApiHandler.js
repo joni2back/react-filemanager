@@ -1,7 +1,7 @@
 import { list, createDirectory, getFileContent } from './Api.js';
 
 const messageTranslation = {
-    'TypeError: Failed to fetch': 'The connector is not responding',
+    'TypeError: Failed to fetch': 'Cannot get a response from connector.',
 };
 
 
