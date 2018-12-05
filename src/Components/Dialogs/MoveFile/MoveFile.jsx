@@ -6,32 +6,36 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
-import { setVisibleModalMoveFile } from '../../../Actions/Actions.js';
-import FileListToMove from '../../FileList/FileListToMove/FileListToMove.jsx'; 
+import { setVisibleModalMoveFile, setSelectedFolderSublist, enterToPreviousDirectorySublist, refreshFileListSublist } from '../../../Actions/Actions.js';
+import FileListSublist from '../../FileList/FileListSublist/FileListSublist.jsx'; 
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 
 class FormDialog extends Component {
 
     render() {
-        const { handleChange, handleClose, handleSave, value, open } = this.props;
+        const { handleChange, handleClose, handleSave, value, open, selectedFolderSublist, canGoBack, handleGoBack } = this.props;
 
         return (
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <form onSubmit={handleSave}>
-                  <DialogTitle id="form-dialog-title">Move files to</DialogTitle>
-                  <DialogContent>
-                    <FileListToMove />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose} color="primary" type="button">
-                      Cancel
-                    </Button>
-                    <Button color="primary" onClick={handleSave} type="submit">
-                      Move
-                    </Button>
-                  </DialogActions>
+                    <DialogTitle id="form-dialog-title">
+                        Move files to <span style={{color: 'grey'}}>{ selectedFolderSublist ? selectedFolderSublist.name : '' }</span>
+                    </DialogTitle>
+                    <DialogContent>
+                        <FileListSublist />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleGoBack} color="primary" type="button" disabled={!canGoBack}>
+                            <KeyboardArrowLeftIcon /> Go back directory
+                        </Button>
+
+                        <Button onClick={handleClose} color="primary" type="button">
+                            Cancel
+                        </Button>
+                        <Button color="primary" onClick={handleSave} type="submit">
+                            Move
+                        </Button>
+                    </DialogActions>
                 </form>
             </Dialog>
         );
@@ -40,16 +44,23 @@ class FormDialog extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.visibleModalMoveFile
+        open: state.visibleModalMoveFile,
+        selectedFolderSublist: state.selectedFolderSublist,
+        canGoBack: state.pathSublist.length
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
+            dispatch(setSelectedFolderSublist(null));
             dispatch(setVisibleModalMoveFile(false));
         },
         handleSave: (event) => {
+        },
+        handleGoBack: (event) => {
+            dispatch(enterToPreviousDirectorySublist());
+            dispatch(refreshFileListSublist());
         }
     };
 };

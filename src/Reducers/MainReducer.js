@@ -1,14 +1,16 @@
 export const defaultState = {
     path: [],
+    pathSublist: [],
     fileList: [],
-    fileListToMove: [],
+    fileListSublist: [],
     fileListFilter: null,
     contextMenuVisible: null,
     contextMenuPosition: [],
     contextMenuPositionElement: null,
     selectedFiles: [],
-    selectedFolderToMove: null,
+    selectedFolderSublist: null,
     loading: false,
+    loadingSublist: false,
     errorMsg: null,
     visibleModalCreateFolder: false,
     visibleModalFileContent: false,
@@ -28,14 +30,22 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 path: action.value
             });
+        case 'SET_PATH_SUB_LIST':
+            return Object.assign({}, state, {
+                pathSublist: action.value
+            });
         case 'ENTER_TO_DIRECTORY':
             return Object.assign({}, state, {
                 path: [...state.path, action.value]
             });
+        case 'ENTER_TO_DIRECTORY_SUB_LIST':
+            return Object.assign({}, state, {
+                pathSublist: [...state.pathSublist, action.value]
+            });
         case 'SET_FILE_LIST':
             return Object.assign({}, state, { fileList: action.value });
-        case 'SET_FILE_LIST_TO_MOVE':
-            return Object.assign({}, state, { fileListToMove: action.value });
+        case 'SET_FILE_LIST_SUB_LIST':
+            return Object.assign({}, state, { fileListSublist: action.value });
 
         case 'SET_FILE_LIST_FILTER':
             return Object.assign({}, state, { 
@@ -57,9 +67,9 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 selectedFiles: (action.value).filter((f, i, self) => self.map(ff => ff.name).indexOf(f.name) === i)
             });
-        case 'SET_SELECTED_FOLDER_TO_MOVE':
+        case 'SET_SELECTED_FOLDER_SUB_LIST':
             return Object.assign({}, state, {
-                selectedFolderToMove: action.value
+                selectedFolderSublist: action.value
             });
 
         case 'TOGGLE_SELECTED_FILE':
@@ -71,6 +81,10 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_LOADING':
             return Object.assign({}, state, { 
                 loading: action.value
+            });
+        case 'SET_LOADING_SUB_LIST':
+            return Object.assign({}, state, { 
+                loadingSublist: action.value
             });
         case 'SET_ERROR_MSG':
             return Object.assign({}, state, { 

@@ -14,7 +14,9 @@ const handleFetch = (resolve, reject) => {
 
             if (/(application|text)\/json/.test(contentType)) {
                 response.json().then(json => {
-                    return resolve(json);
+                    return setTimeout(f => {
+                        resolve(json);
+                    })
                 });
             } else {
                 // is file content to view

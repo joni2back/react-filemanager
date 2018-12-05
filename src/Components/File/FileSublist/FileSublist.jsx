@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setSelectedFolderToMove } from '../../../Actions/Actions.js';
+import { setSelectedFolderSublist, enterToDirectorySublist, refreshFileListSublist } from '../../../Actions/Actions.js';
 
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,12 +25,12 @@ const styles = theme => ({
 });
 
 
-class FileToMove extends Component {
+class FileSublist extends Component {
     render() {
-        const { type, name, handleClick, isSelected } = this.props;
+        const { type, name, handleClick, isSelected, handleDoubleClick } = this.props;
 
         return (
-            <div className="File" onClick={handleClick} data-selected={isSelected}>
+            <div className="File" onClick={handleClick} data-selected={isSelected} onDoubleClick={handleDoubleClick}>
                 <ListItem>
                     <ListItemAvatar>
                         <Avatar>
@@ -48,12 +48,20 @@ class FileToMove extends Component {
 const mapStateToProps = (state, ownState) => {
     return {
         filePath: [...state.path, ownState.name],
-        isSelected: state.selectedFolderToMove && (state.selectedFolderToMove.name === ownState.name)
+        isSelected: state.selectedFolderSublist && (state.selectedFolderSublist.name === ownState.name)
     };
 };
 
 const mapDispatchToProps = (dispatch, ownState) => {
     return {
+        /**
+         * @param {Object} event
+         * @returns {undefined}
+         */
+        handleDoubleClick: (event) => {
+            dispatch(enterToDirectorySublist(ownState.name));
+            dispatch(refreshFileListSublist());
+        },
 
         /**
          * @param {Object} event
@@ -61,10 +69,10 @@ const mapDispatchToProps = (dispatch, ownState) => {
          */
         handleClick: (event) => {
             event.stopPropagation(); 
-            dispatch(setSelectedFolderToMove(ownState));
+            dispatch(setSelectedFolderSublist(ownState));
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(FileToMove));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(FileSublist));
 

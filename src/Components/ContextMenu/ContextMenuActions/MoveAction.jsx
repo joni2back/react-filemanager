@@ -5,8 +5,7 @@ import { getFileContent, enterToDirectory, refreshFileList } from '../../../Acti
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
-import { setVisibleModalMoveFile } from '../../../Actions/Actions.js';
-
+import { initSubList, setVisibleModalMoveFile } from '../../../Actions/Actions.js';
 
 function MoveAction(props) {
     const {handleClick, selectedFiles} = props;
@@ -32,6 +31,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event, selectedFiles) => {
+            dispatch(initSubList());
             dispatch(setVisibleModalMoveFile(true));
         }
     };

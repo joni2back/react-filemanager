@@ -24,6 +24,28 @@ export const refreshFileList = () => (dispatch, getState) => {
 
 
 /**
+ * Request API to get file list for the selected path then refresh UI
+ * @returns {Function}
+ */
+export const refreshFileListSublist = () => (dispatch, getState) => {
+    const { pathSublist } = getState();
+    dispatch(setLoadingSublist(true));
+    dispatch(setSelectedFiles([]));
+
+    getFileList(pathSublist.join('/')).then(r => {
+        dispatch(setLoadingSublist(false));
+        dispatch(setFileListSublist(r));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoadingSublist(false));
+    });
+};
+
+
+/**
  * Request API to get file content then dispatch defined events
  * @param {String} fileName
  * @returns {Function}
@@ -118,9 +140,32 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
     dispatch(setSelectedFiles([...selectedFiles, ...toAdd]));
 };
 
+
+/**
+ * @returns {Function}
+ */
+export const initSubList = () => (dispatch, getState) => {
+    dispatch(setSelectedFolderSublist(null));
+    dispatch(setFileListSublist([]));
+    dispatch(setPathSublist([]));
+    dispatch(refreshFileListSublist());
+};
+
+export const enterToPreviousDirectorySublist = () => (dispatch, getState) => {
+    const { pathSublist } = getState();
+    dispatch(setPathSublist(pathSublist.slice(0, -1)));
+};
+
 export const setPath = (path) => {
     return {
         type: 'SET_PATH',
+        value: path
+    };
+};
+
+export const setPathSublist = (path) => {
+    return {
+        type: 'SET_PATH_SUB_LIST',
         value: path
     };
 };
@@ -132,9 +177,23 @@ export const enterToDirectory = (directory) => {
     };
 };
 
+export const enterToDirectorySublist = (directory) => {
+    return {
+        type: 'ENTER_TO_DIRECTORY_SUB_LIST',
+        value: directory
+    };
+};
+
 export const setFileList = (fileList) => {
     return {
         type: 'SET_FILE_LIST',
+        value: fileList
+    };
+};
+
+export const setFileListSublist = (fileList) => {
+    return {
+        type: 'SET_FILE_LIST_SUB_LIST',
         value: fileList
     };
 };
@@ -146,9 +205,9 @@ export const setSelectedFiles = (files) => {
     };
 };
 
-export const setSelectedFolderToMove = (file) => {
+export const setSelectedFolderSublist = (file) => {
     return {
-        type: 'SET_SELECTED_FOLDER_TO_MOVE',
+        type: 'SET_SELECTED_FOLDER_SUB_LIST',
         value: file
     };
 };
@@ -198,6 +257,13 @@ export const rightClickOnFile = (file) => (dispatch, getState) => {
 export const setLoading = (value) => {
     return {
         type: 'SET_LOADING',
+        value: value
+    };
+};
+
+export const setLoadingSublist = (value) => {
+    return {
+        type: 'SET_LOADING_SUB_LIST',
         value: value
     };
 };
