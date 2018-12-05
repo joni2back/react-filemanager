@@ -146,6 +146,13 @@ export const setSelectedFiles = (files) => {
     };
 };
 
+export const setSelectedFolderToMove = (file) => {
+    return {
+        type: 'SET_SELECTED_FOLDER_TO_MOVE',
+        value: file
+    };
+};
+
 export const setFileListFilter = (search) => {
     return {
         type: 'SET_FILE_LIST_FILTER',
@@ -198,6 +205,13 @@ export const setLoading = (value) => {
 export const setVisibleModalCreateFolder = (visible) => {
     return {
         type: 'SET_VISIBLE_MODAL_CREATE_FOLDER',
+        value: !!visible
+    };
+};
+
+export const setVisibleModalMoveFile = (visible) => {
+    return {
+        type: 'SET_VISIBLE_MODAL_MOVE_FILE',
         value: !!visible
     };
 };

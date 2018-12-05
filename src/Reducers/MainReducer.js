@@ -1,15 +1,18 @@
 export const defaultState = {
     path: [],
     fileList: [],
+    fileListToMove: [],
     fileListFilter: null,
     contextMenuVisible: null,
     contextMenuPosition: [],
     contextMenuPositionElement: null,
     selectedFiles: [],
+    selectedFolderToMove: null,
     loading: false,
     errorMsg: null,
     visibleModalCreateFolder: false,
     visibleModalFileContent: false,
+    visibleModalMoveFile: false,
     fileContentBlobUrl: null
 };
 
@@ -31,6 +34,9 @@ const MainReducer = (state = defaultState, action) => {
             });
         case 'SET_FILE_LIST':
             return Object.assign({}, state, { fileList: action.value });
+        case 'SET_FILE_LIST_TO_MOVE':
+            return Object.assign({}, state, { fileListToMove: action.value });
+
         case 'SET_FILE_LIST_FILTER':
             return Object.assign({}, state, { 
                 fileListFilter: action.value
@@ -51,6 +57,11 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 selectedFiles: (action.value).filter((f, i, self) => self.map(ff => ff.name).indexOf(f.name) === i)
             });
+        case 'SET_SELECTED_FOLDER_TO_MOVE':
+            return Object.assign({}, state, {
+                selectedFolderToMove: action.value
+            });
+
         case 'TOGGLE_SELECTED_FILE':
             return Object.assign({}, state, {
                 selectedFiles: state.selectedFiles.find(f => f.name === action.value.name) ?
@@ -74,6 +85,11 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_VISIBLE_MODAL_FILE_CONTENT':
             return Object.assign({}, state, { 
                 visibleModalFileContent: !!action.value
+            });
+
+        case 'SET_VISIBLE_MODAL_MOVE_FILE':
+            return Object.assign({}, state, { 
+                visibleModalMoveFile: !!action.value
             });
 
         case 'SET_FILE_CONTENT':

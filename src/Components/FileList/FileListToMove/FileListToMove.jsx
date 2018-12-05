@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import File from '../File/File.jsx'; 
 import { connect } from 'react-redux';
-import './FileList.css';
-import Loader from '../Loader/Loader.jsx'; 
+import FileToMove from '../../File//FileToMove/FileToMove.jsx'; 
+import Loader from '../../Loader/Loader.jsx'; 
+import './FileListToMove.css'; 
 
-class FileList extends Component {
+class FileListToMove extends Component {
     render() {
         const { fileList, loading } = this.props;
         
         const fileListComponent = fileList.map((file, key) => {
-            return <File type={file.type} name={file.name} key={key} />
+            return <FileToMove type={file.type} name={file.name} key={key} />
         });
 
         const fileListEmptyComponent = (
             <div style={{margin:20}}>No files in this folder</div>
         );
 
-        return <div className="FileList">
+        return <div className="FileListToMove">
             { loading ? 
                 <Loader /> : 
                 fileListComponent.length ? fileListComponent : fileListEmptyComponent
@@ -27,9 +27,7 @@ class FileList extends Component {
 
 
 const mapStateToProps = (state) => {
-    const filteredList = state.fileList.filter(
-        file => state.fileListFilter ? file.name.toLocaleLowerCase().match(state.fileListFilter.toLocaleLowerCase()) : true
-    );
+    const filteredList = state.fileList.filter(file => file.type === 'dir');
     return {
         fileList: filteredList,
         loading: state.loading
@@ -44,6 +42,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FileList);
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(FileListToMove);

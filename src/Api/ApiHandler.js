@@ -4,6 +4,38 @@ const messageTranslation = {
     'TypeError: Failed to fetch': 'Cannot get a response from connector.',
 };
 
+const handleFetch = (resolve, reject) => {
+    return {
+        xthen: (response) => {
+            const contentType = response.headers.get("content-type");
+            if (! response.ok) {
+                throw response.json();
+            }
+
+            if (/(application|text)\/json/.test(contentType)) {
+                response.json().then(json => {
+                    return resolve(json);
+                });
+            } else {
+                // is file content to view
+                response.blob().then(blob => {
+                    return resolve(blob);
+                });
+            }
+        },
+        xcatch: (errorResponse) => {
+            // is thrown json
+            if (errorResponse && errorResponse.then) {
+                errorResponse.then(errJson => {
+                    return reject(errJson.errorMsg || JSON.stringify(errJson));
+                });
+            } else {
+                return reject(messageTranslation[errorResponse] || errorResponse);
+            }
+        }
+    }
+}
+
 
 /**
  * Wrap API response for retrive file liest
@@ -13,16 +45,9 @@ const messageTranslation = {
 export const getFileList = (path) => {
     path = '/' + path;
     return new Promise((resolve, reject) => {
-        return list(path).then(r => {
-            if (! r.ok) {
-                return reject(r);
-            }
-            return r.json();
-        }).then(json => {
-            resolve(json);
-        }).catch(r => {
-            return reject(messageTranslation[r] || r);
-        });
+        return list(path)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
     })
 };
 
@@ -34,16 +59,9 @@ export const getFileList = (path) => {
 export const getFileBody = (path, filename) => {
     path = '/' + path + '/' + filename;
     return new Promise((resolve, reject) => {
-        return getFileContent(path).then(r => {
-            if (! r.ok) {
-                return reject(r);
-            }
-            return r.blob();
-        }).then(blob => {
-            resolve(blob);
-        }).catch(r => {
-            return reject(messageTranslation[r] || r);
-        });
+        return getFileContent(path)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
     })
 };
 
@@ -56,16 +74,9 @@ export const getFileBody = (path, filename) => {
 export const createFolder = (path, folder) => {
     path = '/' + path;
     return new Promise((resolve, reject) => {
-        return createDirectory(path, folder).then(r => {
-            if (! r.ok) {
-                return reject(r);
-            }
-            return r.json();
-        }).then(json => {
-            resolve(json);
-        }).catch(r => {
-            return reject(messageTranslation[r] || r);
-        });
+        return createDirectory(path, folder)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
     })
 };
 
@@ -79,16 +90,9 @@ export const createFolder = (path, folder) => {
 export const removeFile = (path, filenames, recursive = true) => {
     path = '/' + path;
     return new Promise((resolve, reject) => {
-        return remove(path, filenames, recursive).then(r => {
-            if (! r.ok) {
-                return reject(r);
-            }
-            return r.json();
-        }).then(json => {
-            resolve(json);
-        }).catch(r => {
-            return reject(messageTranslation[r] || r);
-        });
+        return remove(path, filenames, recursive)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
     })
 };
 
@@ -100,25 +104,28 @@ export const removeFile = (path, filenames, recursive = true) => {
  */
 export const getActionsByFile = (filename, type) => {
     const regex = {
-        isEditableFilePattern: /\.(txt|diff?|patch|svg|asc|cnf|cfg|conf|html?|.html|cfm|cgi|aspx?|ini|pl|py|md|css|cs|jsx?|jsp|log|htaccess|htpasswd|gitignore|gitattributes|env|json|atom|eml|rss|markdown|sql|xml|xslt?|sh|rb|as|bat|cmd|cob|for|ftn|frm|frx|inc|lisp|scm|coffee|php[3-6]?|java|c|cbl|go|h|scala|vb|tmpl|lock|go|yml|yaml|tsv|lst)$/i,
+        isEditableFilePattern: /\.(txt|diff?|patch|svg|asc|cnf|cfg|conf|html?|cfm|cgi|aspx?|ini|pl|py|md|css|cs|jsx?|jsp|log|htaccess|htpasswd|gitignore|gitattributes|env|json|atom|eml|rss|markdown|sql|xml|xslt?|sh|rb|as|bat|cmd|cob|for|ftn|frm|frx|inc|lisp|scm|coffee|php[3-6]?|java|c|cbl|go|h|scala|vb|tmpl|lock|go|yml|yaml|tsv|lst)$/i,
         isImageFilePattern: /\.(jpe?g|gif|bmp|png|svg|tiff?)$/i,
         isExtractableFilePattern: /\.(gz|tar|rar|g?zip)$/i,
     };
 
-    let acts = ['remove', 'move', 'perms'];
-
+    let acts = [];
     if (type === 'dir') {
         acts.push('open');
         acts.push('compress');
     }
 
     if (type === 'file') {
-        acts.push('copy');
+        (regex.isImageFilePattern.test(filename) || regex.isEditableFilePattern.test(filename)) && acts.push('open');
         acts.push('download');
         regex.isEditableFilePattern.test(filename) && acts.push('edit');
         regex.isExtractableFilePattern.test(filename) && acts.push('extract');
-        (regex.isImageFilePattern.test(filename) || regex.isEditableFilePattern.test(filename)) && acts.push('open');
+        acts.push('copy');
     }
+
+    acts.push('move');
+    acts.push('perms');
+    acts.push('remove');
 
     return acts;
 }

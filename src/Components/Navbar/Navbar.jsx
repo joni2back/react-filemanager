@@ -17,6 +17,7 @@ import BreadcrumbText from '../Breadcrumb/BreadcrumbText.jsx';
 const styles = theme => ({
   root: {
     width: '100%',
+    marginBottom: '.4em'
   },
   grow: {
     flexGrow: 1,

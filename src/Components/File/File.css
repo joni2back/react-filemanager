@@ -11,12 +11,12 @@
     background: #fafafa;
 }
 
-.File[data-selected] {
+.File[data-selected=true] {
     background-color: #e8f0fe;
     
 }
 
-.File[data-selected],
-.File[data-selected] > li > div > span {
+.File[data-selected=true],
+.File[data-selected=true] > li > div > span {
     color: #1967d2;
 }

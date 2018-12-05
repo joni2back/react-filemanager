@@ -6,6 +6,7 @@ import MeuItem from '@material-ui/core/MenuItem';
 import { getActionsByFile } from '../../Api/ApiHandler.js';
 import OpenAction from './ContextMenuActions/OpenAction.jsx';
 import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
+import MoveAction from './ContextMenuActions/MoveAction.jsx';
 
 class ContextMenu extends Component {
 
@@ -14,6 +15,9 @@ class ContextMenu extends Component {
         const actionsComp = acts.map((act, key) => {
             if (act === 'open') {
                 return <OpenAction key={key} />;
+            }
+            if (act === 'move') {
+                return <MoveAction key={key} />;
             }
             if (act === 'remove') {
                 return <RemoveAction key={key} />;

@@ -30,20 +30,11 @@ const styles = theme => ({
 
 
 class File extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            name: null,
-            type: null,
-        };
-    }
-
     render() {
-        const { selected, type, name, handleClick, handleDoubleClick, handleContextMenu } = this.props;
+        const { isSelected, type, name, handleClick, handleDoubleClick, handleContextMenu } = this.props;
 
         return (
-            <div className="File" onClick={handleClick} onDoubleClick={handleDoubleClick} onContextMenu={handleContextMenu} data-selected={selected}>
+            <div className="File" onClick={handleClick} onDoubleClick={handleDoubleClick} onContextMenu={handleContextMenu} data-selected={isSelected}>
                 <ListItem>
                     <ListItemAvatar>
                         <Avatar>
@@ -61,7 +52,7 @@ class File extends Component {
 const mapStateToProps = (state, ownState) => {
     return {
         filePath: [...state.path, ownState.name],
-        selected: state.selectedFiles.find(f => f.name === ownState.name)
+        isSelected: !!state.selectedFiles.find(f => f.name === ownState.name)
     };
 };
 

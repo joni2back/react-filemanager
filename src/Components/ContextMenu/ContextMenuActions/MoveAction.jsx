@@ -1,20 +1,23 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
-import { removeItems } from '../../../Actions/Actions.js';
+import { getFileContent, enterToDirectory, refreshFileList } from '../../../Actions/Actions.js';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
+import HowToVoteIcon from '@material-ui/icons/HowToVote';
+import { setVisibleModalMoveFile } from '../../../Actions/Actions.js';
 
-function RemoveAction(props) {
+
+function MoveAction(props) {
     const {handleClick, selectedFiles} = props;
+
     return (
         <MenuItem onClick={(e) => handleClick(e, selectedFiles)}>
             <ListItemIcon>
-                <DeleteIcon />
+                <HowToVoteIcon />
             </ListItemIcon>
             <Typography variant="inherit">
-                Remove
+                Move
             </Typography>
         </MenuItem>        
     );
@@ -29,9 +32,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event, selectedFiles) => {
-            dispatch(removeItems(selectedFiles));
+            dispatch(setVisibleModalMoveFile(true));
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RemoveAction);
+export default connect(mapStateToProps, mapDispatchToProps)(MoveAction);
