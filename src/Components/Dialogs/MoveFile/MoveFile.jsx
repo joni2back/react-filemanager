@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,7 +12,7 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 class FormDialog extends Component {
 
     render() {
-        const { handleChange, handleClose, handleSave, value, open, selectedFolderSublist, canGoBack, handleGoBack } = this.props;
+        const { handleClose, handleSave, open, selectedFolderSublist, canGoBack, handleGoBack } = this.props;
 
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -32,7 +31,7 @@ class FormDialog extends Component {
                         <Button onClick={handleClose} color="primary" type="button">
                             Cancel
                         </Button>
-                        <Button color="primary" onClick={handleSave} type="submit">
+                        <Button color="primary" onClick={handleSave} disabled={!selectedFolderSublist} type="submit">
                             Move
                         </Button>
                     </DialogActions>
@@ -46,7 +45,7 @@ const mapStateToProps = (state) => {
     return {
         open: state.visibleModalMoveFile,
         selectedFolderSublist: state.selectedFolderSublist,
-        canGoBack: state.pathSublist.length
+        canGoBack: state.pathSublist.length,
     };
 };
 
@@ -59,6 +58,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         handleSave: (event) => {
         },
         handleGoBack: (event) => {
+            dispatch(setSelectedFolderSublist(null));
             dispatch(enterToPreviousDirectorySublist());
             dispatch(refreshFileListSublist());
         }

@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import FileSublist from '../../File//FileSublist/FileSublist.jsx'; 
 import Loader from '../../Loader/Loader.jsx'; 
 import './FileListSublist.css'; 
-import { enterToPreviousDirectorySublist, refreshFileListSublist } from '../../../Actions/Actions.js';
 
 class FileListSublist extends Component {
     render() {
-        const { fileList, loadingSublist, handleGoBackClick } = this.props;
+        const { fileList, loadingSublist } = this.props;
         
         const fileListComponent = fileList.map((file, key) => {
             return <FileSublist type={file.type} name={file.name} key={key} />
@@ -40,10 +39,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleGoBackClick: (event) => {
-            dispatch(enterToPreviousDirectorySublist());
-            dispatch(refreshFileListSublist());
-        }
     };
 };
 

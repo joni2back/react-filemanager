@@ -3,7 +3,6 @@ import './App.css';
 import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
-import Breadcrumb from './Components/Breadcrumb/Breadcrumb.jsx';
 import DialogFileContent from './Components/Dialogs/FileContent/FileContent.jsx';
 import DialogCreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
 import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';

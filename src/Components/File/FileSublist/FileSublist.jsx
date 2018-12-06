@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setSelectedFolderSublist, enterToDirectorySublist, refreshFileListSublist } from '../../../Actions/Actions.js';
+import { 
+    setSelectedFolderSublist, enterToDirectorySublist, 
+    refreshFileListSublist 
+} from '../../../Actions/Actions.js';
 
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -60,6 +63,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
          */
         handleDoubleClick: (event) => {
             dispatch(enterToDirectorySublist(ownState.name));
+            dispatch(setSelectedFolderSublist(null));
             dispatch(refreshFileListSublist());
         },
 

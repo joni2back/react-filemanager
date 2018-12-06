@@ -42,14 +42,12 @@ class FormDialog extends Component {
 
         return (
           <div style={{marginLeft:'1em'}}>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">File Content</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Viewing file </DialogTitle>
               <DialogContent>
-                {this.state.loading ? 'Loading...' : this.state.content}
+                <pre>
+                  {this.state.loading ? 'Loading...' : this.state.content}
+                </pre>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary" type="button">

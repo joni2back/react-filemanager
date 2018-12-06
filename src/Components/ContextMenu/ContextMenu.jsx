@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ContextMenu.css';
 import Menu from '@material-ui/core/Menu';
-import MeuItem from '@material-ui/core/MenuItem';
 import { getActionsByFile } from '../../Api/ApiHandler.js';
 import OpenAction from './ContextMenuActions/OpenAction.jsx';
 import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
@@ -13,15 +12,17 @@ class ContextMenu extends Component {
     render() {
         const { anchorEl, acts, visible } = this.props;
         const actionsComp = acts.map((act, key) => {
+            let component;
             if (act === 'open') {
-                return <OpenAction key={key} />;
+                component = <OpenAction key={key} />;
             }
             if (act === 'move') {
-                return <MoveAction key={key} />;
+                component = <MoveAction key={key} />;
             }
             if (act === 'remove') {
-                return <RemoveAction key={key} />;
+                component = <RemoveAction key={key} />;
             }
+            return component;
         });
 
         return (
@@ -54,7 +55,7 @@ export const getActionsBySelectedFiles = (selectedFiles) => {
         acts = acts.length ? acts.filter(value => -1 !== fileActs.indexOf(value)) : fileActs;
     });
 
-    selectedFiles.length > 1 && acts.splice(acts.indexOf('open'), acts.indexOf('open'));
+    selectedFiles.length > 1 && acts.splice(acts.indexOf('open'), acts.indexOf('open') >= 0);
     return acts;
 }
 
