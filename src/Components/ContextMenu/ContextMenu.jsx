@@ -6,6 +6,7 @@ import { getActionsByFile } from '../../Api/ApiHandler.js';
 import OpenAction from './ContextMenuActions/OpenAction.jsx';
 import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
 import MoveAction from './ContextMenuActions/MoveAction.jsx';
+import CopyAction from './ContextMenuActions/CopyAction.jsx';
 
 class ContextMenu extends Component {
 
@@ -16,6 +17,9 @@ class ContextMenu extends Component {
             if (act === 'open') {
                 component = <OpenAction key={key} />;
             }
+            if (act === 'copy') {
+                component = <CopyAction key={key} />;
+            }            
             if (act === 'move') {
                 component = <MoveAction key={key} />;
             }

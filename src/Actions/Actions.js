@@ -282,6 +282,13 @@ export const setVisibleModalMoveFile = (visible) => {
     };
 };
 
+export const setVisibleModalCopyFile = (visible) => {
+    return {
+        type: 'SET_VISIBLE_MODAL_COPY_FILE',
+        value: !!visible
+    };
+};
+
 export const setVisibleModalFileContent = (visible) => {
     return {
         type: 'SET_VISIBLE_MODAL_FILE_CONTENT',

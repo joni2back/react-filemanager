@@ -12,31 +12,24 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import FolderIcon from '@material-ui/icons/Folder';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
+import blue from '@material-ui/core/colors/blue';
 import '../File.css';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: 752,
-  },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  title: {
-    margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`,
-  },
 });
 
 
 class FileSublist extends Component {
     render() {
         const { type, name, handleClick, isSelected, handleDoubleClick } = this.props;
-
+        const avatarStyle = {
+            backgroundColor: isSelected ? blue['A200'] : null
+        };
         return (
             <div className="File" onClick={handleClick} data-selected={isSelected} onDoubleClick={handleDoubleClick}>
                 <ListItem>
                     <ListItemAvatar>
-                        <Avatar>
+                        <Avatar style={avatarStyle}>
                             { type === 'dir' ? <FolderIcon /> : <FileIcon />}
                         </Avatar>
                     </ListItemAvatar>

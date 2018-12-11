@@ -15,6 +15,7 @@ export const defaultState = {
     visibleModalCreateFolder: false,
     visibleModalFileContent: false,
     visibleModalMoveFile: false,
+    visibleModalCopyFile: false,
     fileContentBlobUrl: null
 };
 
@@ -43,9 +44,13 @@ const MainReducer = (state = defaultState, action) => {
                 pathSublist: [...state.pathSublist, action.value]
             });
         case 'SET_FILE_LIST':
-            return Object.assign({}, state, { fileList: action.value });
+            return Object.assign({}, state, {
+                fileList: action.value.sort((a, b) => a.type < b.type ? -1 : a.name.toLowerCase() > b.name.toLowerCase())
+            });
         case 'SET_FILE_LIST_SUB_LIST':
-            return Object.assign({}, state, { fileListSublist: action.value });
+            return Object.assign({}, state, {
+                fileListSublist: action.value.sort((a, b) => a.type < b.type ? -1 : a.name.toLowerCase() > b.name.toLowerCase())
+            });
 
         case 'SET_FILE_LIST_FILTER':
             return Object.assign({}, state, { 
@@ -105,7 +110,10 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, { 
                 visibleModalMoveFile: !!action.value
             });
-
+        case 'SET_VISIBLE_MODAL_COPY_FILE':
+            return Object.assign({}, state, { 
+                visibleModalCopyFile: !!action.value
+            });
         case 'SET_FILE_CONTENT':
             /**
              * Removing old blob url

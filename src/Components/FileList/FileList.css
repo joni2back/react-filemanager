@@ -1,3 +1,11 @@
 .FileList {
     overflow: auto
 }
+
+.FileList .File {
+    float: left;
+    width: 33.3%;
+    height: 56px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

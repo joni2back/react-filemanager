@@ -6,6 +6,7 @@ import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
 import DialogFileContent from './Components/Dialogs/FileContent/FileContent.jsx';
 import DialogCreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
 import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';
+import DialogCopyFile from './Components/Dialogs/CopyFile/CopyFile.jsx';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -31,6 +32,7 @@ class App extends Component {
                     <DialogFileContent />
                     <DialogCreateFolder />
                     <DialogMoveFile />
+                    <DialogCopyFile />
                     <ContextMenu />
                     <DynamicSnackbar />
                 </div>
