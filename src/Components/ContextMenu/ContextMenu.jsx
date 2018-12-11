@@ -10,7 +10,7 @@ import MoveAction from './ContextMenuActions/MoveAction.jsx';
 class ContextMenu extends Component {
 
     render() {
-        const { anchorEl, acts, visible } = this.props;
+        const { acts, visible, x, y } = this.props;
         const actionsComp = acts.map((act, key) => {
             let component;
             if (act === 'open') {
@@ -26,13 +26,17 @@ class ContextMenu extends Component {
         });
 
         return (
-            <div>
-                <Menu
-                    anchorEl={anchorEl} 
-                    /*style={{top: y, left: x}} */
+            <div> 
+                <Menu 
+                    anchorReference="anchorPosition"
+                    anchorPosition={{ top: y, left: x }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
                     open={visible} 
                     onClose={ () => {} } 
-                    PaperProps={{ style: {width: 160} }}>
+                    PaperProps={{ style: {width: 170} }}>
                     { actionsComp }
                 </Menu>
             </div>
@@ -61,11 +65,10 @@ export const getActionsBySelectedFiles = (selectedFiles) => {
 
 const mapStateToProps = (state) => {
     return {
-        x: state.contextMenuPosition[0] -20|| 0,
-        y: state.contextMenuPosition[1] -50|| 0,
+        x: state.contextMenuPosition[0] || 0,
+        y: state.contextMenuPosition[1] || 0,
         visible: !!state.contextMenuVisible,
         acts: getActionsBySelectedFiles(state.selectedFiles),
-        anchorEl: state.contextMenuPositionElement
     };
 };
 

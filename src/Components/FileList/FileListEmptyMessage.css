@@ -1,0 +1,9 @@
+.FileListEmptyMessage {
+    margin: 5px 10px;
+    padding: 20px;
+    display: block;
+    border-radius: 5px;
+    background: #efefef;
+    color: #333;
+    font-size: 15px;
+}

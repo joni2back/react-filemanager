@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import File from '../File/File.jsx'; 
 import { connect } from 'react-redux';
 import './FileList.css';
+import FileListEmptyMessage from './FileListEmptyMessage';
 import Loader from '../Loader/Loader.jsx'; 
 
 class FileList extends Component {
@@ -12,14 +13,10 @@ class FileList extends Component {
             return <File type={file.type} name={file.name} key={key} />
         });
 
-        const fileListEmptyComponent = (
-            <div style={{margin:20}}>No files in this folder</div>
-        );
-
         return <div className="FileList">
             { loading ? 
                 <Loader /> : 
-                fileListComponent.length ? fileListComponent : fileListEmptyComponent
+                fileListComponent.length ? fileListComponent : <FileListEmptyMessage />
             }
         </div>
     }

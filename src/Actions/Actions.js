@@ -30,7 +30,7 @@ export const refreshFileList = () => (dispatch, getState) => {
 export const refreshFileListSublist = () => (dispatch, getState) => {
     const { pathSublist } = getState();
     dispatch(setLoadingSublist(true));
-    dispatch(setSelectedFiles([]));
+    dispatch(setSelectedFolderSublist([]));
 
     getFileList(pathSublist.join('/')).then(r => {
         dispatch(setLoadingSublist(false));
@@ -146,7 +146,7 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
  */
 export const initSubList = () => (dispatch, getState) => {
     dispatch(setSelectedFolderSublist(null));
-    dispatch(setFileListSublist([]));
+    dispatch(setFileListSublist([]));    
     dispatch(setPathSublist([]));
     dispatch(refreshFileListSublist());
 };

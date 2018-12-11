@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     refreshFileList, enterToDirectory, setContextMenuVisible, 
-    toggleSelectedFile, setContextMenuPositionElement,
+    toggleSelectedFile, setContextMenuPositionElement,setContextMenuPosition,
     setSelectedFileFromLastTo, getFileContent, rightClickOnFile, setSelectedFiles
 } from '../../Actions/Actions.js';
 import './File.css';
@@ -79,8 +79,8 @@ const mapDispatchToProps = (dispatch, ownState) => {
             event.preventDefault();
             event.stopPropagation();
 
-            // let x = event.clientX || (event.touches && event.touches[0].pageX);
-            // let y = event.clientY || (event.touches && event.touches[0].pageY);
+            const x = event.clientX || (event.touches && event.touches[0].pageX);
+            const y = event.clientY || (event.touches && event.touches[0].pageY);
 
             if (event.shiftKey) {
                 dispatch(setSelectedFileFromLastTo(ownState));
@@ -89,8 +89,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
             }
             
             dispatch(setContextMenuVisible(true));
-            //dispatch(setContextMenuPosition(x, y));
-            dispatch(setContextMenuPositionElement(event.currentTarget));
+            dispatch(setContextMenuPosition(x, y));
         },
 
         /**
