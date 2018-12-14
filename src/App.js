@@ -4,6 +4,7 @@ import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
 import DialogFileContent from './Components/Dialogs/FileContent/FileContent.jsx';
+import DialogEditFile from './Components/Dialogs/EditFile/EditFile.jsx';
 import DialogCreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
 import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';
 import DialogCopyFile from './Components/Dialogs/CopyFile/CopyFile.jsx';
@@ -30,6 +31,7 @@ class App extends Component {
                     <Navbar />
                     <FileList />
                     <DialogFileContent />
+                    <DialogEditFile />
                     <DialogCreateFolder />
                     <DialogMoveFile />
                     <DialogCopyFile />

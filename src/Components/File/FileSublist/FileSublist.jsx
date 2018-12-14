@@ -57,7 +57,6 @@ const mapDispatchToProps = (dispatch, ownState) => {
         handleDoubleClick: (event) => {
             dispatch(enterToDirectorySublist(ownState.name));
             dispatch(setSelectedFolderSublist(null));
-            dispatch(refreshFileListSublist());
         },
 
         /**

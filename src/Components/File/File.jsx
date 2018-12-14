@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     refreshFileList, enterToDirectory, setContextMenuVisible, 
     toggleSelectedFile, setContextMenuPositionElement,setContextMenuPosition,
-    setSelectedFileFromLastTo, getFileContent, rightClickOnFile, setSelectedFiles
+    setSelectedFileFromLastTo, getFileContent, getFileContentForEdit, rightClickOnFile, setSelectedFiles
 } from '../../Actions/Actions.js';
 import './File.css';
 
@@ -15,6 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import FolderIcon from '@material-ui/icons/Folder';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import blue from '@material-ui/core/colors/blue';
+import config from '../../config.js';
 
 const styles = theme => ({
 });
@@ -56,11 +57,15 @@ const mapDispatchToProps = (dispatch, ownState) => {
          */
         handleDoubleClick: (event) => {
             if (ownState.type === 'file') {
-                dispatch(getFileContent(ownState.name));
+                if (config.isEditableFilePattern.test(ownState.name)) {
+                    dispatch(getFileContentForEdit(ownState.name));
+                } else if (config.isImageFilePattern.test(ownState.name)) {
+                    dispatch(getFileContent(ownState.name));
+                }
                 return;
             }
+
             dispatch(enterToDirectory(ownState.name));
-            dispatch(refreshFileList());
         },
 
         /**

@@ -11,12 +11,12 @@ import { connect } from 'react-redux';
 import { setFileListFilter } from '../../Actions/Actions.js';
 import ThreeDotsMenu from './ThreeDotsMenu.jsx';
 import BreadcrumbText from '../Breadcrumb/BreadcrumbText.jsx';
-import { setPath, refreshFileList } from '../../Actions/Actions.js';
+import { setPath, refreshFileList, enterToPreviousDirectory } from '../../Actions/Actions.js';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    marginBottom: '.4em'
+    marginBottom: '4.3em'
   },
   grow: {
     flexGrow: 1,
@@ -26,7 +26,7 @@ const styles = theme => ({
     marginRight: 20,
   },
   title: {
-    display: 'none',
+    display: 'block', // was none
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
@@ -40,9 +40,11 @@ const styles = theme => ({
     },
     marginLeft: 0,
     width: '100%',
+    display: 'none',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing.unit,
       width: 'auto',
+      display: 'block'
     },
   },
   searchIcon: {
@@ -66,7 +68,7 @@ const styles = theme => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      width: 120,
+      width: 100,
       '&:focus': {
         width: 200,
       },
@@ -75,13 +77,19 @@ const styles = theme => ({
 });
 
 function SearchAppBar(props) {
-  const { classes, path, handleClickPath } = props;
+  const { classes, path, handleClickPath, handleGoBack, canGoBack } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            <BreadcrumbText path={path} handleClickPath={handleClickPath} rootTitle="React Filemanager" />
+            <BreadcrumbText 
+                path={path} 
+                handleClickPath={handleClickPath} 
+                handleGoBack={handleGoBack}
+                canGoBack={canGoBack}
+                rootTitle="React Filemanager"
+            />
           </Typography>
           <div className={classes.grow} />
 
@@ -114,7 +122,8 @@ SearchAppBar.propTypes = {
 const mapStateToProps = (state) => {
     return {
         value: state.fileListFilter || '',
-        path: state.path
+        path: state.path,
+        canGoBack: state.path.length
     };
 };
 
@@ -123,7 +132,9 @@ const mapDispatchToProps = (dispatch) => {
         handleChange: (event) => {
             dispatch(setFileListFilter(event.currentTarget.value));
         },
-
+        handleGoBack: (event) => {
+            dispatch(enterToPreviousDirectory());
+        },
         /**
          * @param {Object} event
          * @param {Number} index

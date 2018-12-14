@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
-import { setVisibleModalMoveFile, setSelectedFolderSublist, enterToPreviousDirectorySublist, refreshFileListSublist } from '../../../Actions/Actions.js';
+import { setVisibleModalMoveFile, setSelectedFolderSublist, enterToPreviousDirectorySublist } from '../../../Actions/Actions.js';
 import FileListSublist from '../../FileList/FileListSublist/FileListSublist.jsx'; 
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 
@@ -60,7 +60,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         handleGoBack: (event) => {
             dispatch(setSelectedFolderSublist(null));
             dispatch(enterToPreviousDirectorySublist());
-            dispatch(refreshFileListSublist());
         }
     };
 };

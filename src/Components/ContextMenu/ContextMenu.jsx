@@ -7,6 +7,7 @@ import OpenAction from './ContextMenuActions/OpenAction.jsx';
 import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
 import MoveAction from './ContextMenuActions/MoveAction.jsx';
 import CopyAction from './ContextMenuActions/CopyAction.jsx';
+import EditAction from './ContextMenuActions/EditAction.jsx';
 
 class ContextMenu extends Component {
 
@@ -16,6 +17,9 @@ class ContextMenu extends Component {
             let component;
             if (act === 'open') {
                 component = <OpenAction key={key} />;
+            }
+            if (act === 'edit') {
+                component = <EditAction key={key} />;
             }
             if (act === 'copy') {
                 component = <CopyAction key={key} />;
@@ -63,7 +67,10 @@ export const getActionsBySelectedFiles = (selectedFiles) => {
         acts = acts.length ? acts.filter(value => -1 !== fileActs.indexOf(value)) : fileActs;
     });
 
-    selectedFiles.length > 1 && acts.splice(acts.indexOf('open'), acts.indexOf('open') >= 0);
+    if (selectedFiles.length > 1) {
+        acts.splice(acts.indexOf('open'), acts.indexOf('open') >= 0)
+        acts.splice(acts.indexOf('edit'), acts.indexOf('edit') >= 0)
+    }
     return acts;
 }
 

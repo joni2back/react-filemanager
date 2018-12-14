@@ -1,7 +1,7 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
-import { getFileContent, enterToDirectory, refreshFileList } from '../../../Actions/Actions.js';
+import { getFileContentForEdit } from '../../../Actions/Actions.js';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
@@ -14,7 +14,7 @@ function OpenAction(props) {
                 <OpenInBrowserIcon />
             </ListItemIcon>
             <Typography variant="inherit">
-                Open
+                Edit
             </Typography>
         </MenuItem>        
     );
@@ -29,11 +29,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event, selectedFiles) => {
-            if (selectedFiles[0].type === 'dir') {
-                dispatch(enterToDirectory(selectedFiles[0].name));
-                return;
-            }
-            dispatch(getFileContent(selectedFiles[0].name));
+            dispatch(getFileContentForEdit(selectedFiles[0].name));
         }
     };
 };

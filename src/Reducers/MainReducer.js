@@ -14,6 +14,7 @@ export const defaultState = {
     errorMsg: null,
     visibleModalCreateFolder: false,
     visibleModalFileContent: false,
+    visibleModalFileEdit: false,
     visibleModalMoveFile: false,
     visibleModalCopyFile: false,
     fileContentBlobUrl: null
@@ -104,6 +105,11 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_VISIBLE_MODAL_FILE_CONTENT':
             return Object.assign({}, state, { 
                 visibleModalFileContent: !!action.value
+            });
+
+        case 'SET_VISIBLE_MODAL_FILE_EDIT':
+            return Object.assign({}, state, { 
+                visibleModalFileEdit: !!action.value
             });
 
         case 'SET_VISIBLE_MODAL_MOVE_FILE':

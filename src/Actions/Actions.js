@@ -69,6 +69,31 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
 };
 
 
+
+/**
+ * Request API to get file content then dispatch defined events
+ * @param {String} fileName
+ * @returns {Function}
+ */
+export const getFileContentForEdit = (fileName) => (dispatch, getState) => {
+    const { path } = getState();
+
+    dispatch(setLoading(true));
+    dispatch(setFileContent(null));
+    dispatch(setVisibleModalFileEdit(true));
+    getFileBody(path.join('/'), fileName).then(blob => {
+        dispatch(setFileContent(blob));
+        dispatch(setLoading(false));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
+
+
 /**
  * Request API to create a folder then dispatch defined events
  * @param {String} createFolderName
@@ -151,9 +176,16 @@ export const initSubList = () => (dispatch, getState) => {
     dispatch(refreshFileListSublist());
 };
 
+export const enterToPreviousDirectory = () => (dispatch, getState) => {
+    const { path } = getState();
+    dispatch(setPath(path.slice(0, -1)));
+    dispatch(refreshFileList());    
+};
+
 export const enterToPreviousDirectorySublist = () => (dispatch, getState) => {
     const { pathSublist } = getState();
     dispatch(setPathSublist(pathSublist.slice(0, -1)));
+    dispatch(refreshFileListSublist());
 };
 
 export const setPath = (path) => {
@@ -170,18 +202,20 @@ export const setPathSublist = (path) => {
     };
 };
 
-export const enterToDirectory = (directory) => {
-    return {
+export const enterToDirectory = (directory) => (dispatch, getState) => {
+    dispatch({
         type: 'ENTER_TO_DIRECTORY',
         value: directory
-    };
+    });
+    dispatch(refreshFileList());
 };
 
-export const enterToDirectorySublist = (directory) => {
-    return {
+export const enterToDirectorySublist = (directory) => (dispatch, getState) => {
+    dispatch({
         type: 'ENTER_TO_DIRECTORY_SUB_LIST',
         value: directory
-    };
+    });
+    dispatch(refreshFileListSublist());
 };
 
 export const setFileList = (fileList) => {
@@ -296,6 +330,13 @@ export const setVisibleModalFileContent = (visible) => {
     };
 };
 
+export const setVisibleModalFileEdit = (visible) => {
+    return {
+        type: 'SET_VISIBLE_MODAL_FILE_EDIT',
+        value: !!visible
+    };
+};
+
 
 export const setFileContent = (blob) => {
    return {
@@ -303,3 +344,4 @@ export const setFileContent = (blob) => {
         value: blob
     };
 };
+

@@ -1,4 +1,5 @@
 import { list, createDirectory, getFileContent, remove } from './Api.js';
+import config from './../config.js';
 
 const messageTranslation = {
     'TypeError: Failed to fetch': 'Cannot get a response from connector.',
@@ -105,12 +106,6 @@ export const removeFile = (path, filenames, recursive = true) => {
  * @returns {Array<String>}
  */
 export const getActionsByFile = (filename, type) => {
-    const regex = {
-        isEditableFilePattern: /\.(txt|diff?|patch|svg|asc|cnf|cfg|conf|html?|cfm|cgi|aspx?|ini|pl|py|md|css|cs|jsx?|jsp|log|htaccess|htpasswd|gitignore|gitattributes|env|json|atom|eml|rss|markdown|sql|xml|xslt?|sh|rb|as|bat|cmd|cob|for|ftn|frm|frx|inc|lisp|scm|coffee|php[3-6]?|java|c|cbl|go|h|scala|vb|tmpl|lock|go|yml|yaml|tsv|lst)$/i,
-        isImageFilePattern: /\.(jpe?g|gif|bmp|png|svg|tiff?)$/i,
-        isExtractableFilePattern: /\.(gz|tar|rar|g?zip)$/i,
-    };
-
     let acts = [];
     if (type === 'dir') {
         acts.push('open');
@@ -118,10 +113,11 @@ export const getActionsByFile = (filename, type) => {
     }
 
     if (type === 'file') {
-        (regex.isImageFilePattern.test(filename) || regex.isEditableFilePattern.test(filename)) && acts.push('open');
+        //(config.isImageFilePattern.test(filename) || config.isEditableFilePattern.test(filename)) && acts.push('open');
         acts.push('download');
-        regex.isEditableFilePattern.test(filename) && acts.push('edit');
-        regex.isExtractableFilePattern.test(filename) && acts.push('extract');
+        config.isImageFilePattern.test(filename) && acts.push('open');
+        config.isEditableFilePattern.test(filename) && acts.push('edit');
+        config.isExtractableFilePattern.test(filename) && acts.push('extract');
         acts.push('copy');
     }
 
