@@ -2,22 +2,32 @@ import { list, createDirectory, getFileContent, remove, move, copy } from './Api
 import config from './../config.js';
 
 const messageTranslation = {
+    'unknown_response': 'Unknown error response from connector',
     'TypeError: Failed to fetch': 'Cannot get a response from connector.',
 };
 
+/**
+ * Response handler for fetch responses
+ * @param {Function} resolve
+ * @param {Function} reject
+ * @returns {Object}
+ */
 const handleFetch = (resolve, reject) => {
     return {
         xthen: (response) => {
-            const contentType = response.headers.get("content-type");
+            const contentType = response.headers.get('content-type');
+            const isJson = /(application|text)\/json/.test(contentType);
+
             if (! response.ok) {
-                throw response.json();
+                if (isJson) {
+                    throw response.json();
+                }
+                throw Error(messageTranslation['unknown_response']);
             }
 
-            if (/(application|text)\/json/.test(contentType)) {
+            if (isJson) {
                 response.json().then(json => {
-                    return setTimeout(f => {
-                        resolve(json);
-                    })
+                    resolve(json);
                 });
             } else {
                 // is file content to view
@@ -39,6 +49,11 @@ const handleFetch = (resolve, reject) => {
     }
 }
 
+/**
+ * Clean path string removing double slashes and prepending a slash
+ * @param {String} path
+ * @returns {String}
+ */
 const fixPath = (path) => {
     return ('/' + path).replace(/\/\//g, '/');
 };
@@ -128,6 +143,7 @@ export const moveFile = (path, destination, filenames) => {
  */
 export const copyFile = (path, destination, filenames) => {
     path = fixPath(path);
+    destination = fixPath(destination);
     return new Promise((resolve, reject) => {
         return copy(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
@@ -141,15 +157,13 @@ export const copyFile = (path, destination, filenames) => {
  * @param {String} type
  * @returns {Array<String>}
  */
-export const getActionsByFile = (filename, type) => {
-    let acts = [];
+export const getActionsByFile = (filename, type, acts = []) => {
     if (type === 'dir') {
         acts.push('open');
         acts.push('compress');
     }
 
     if (type === 'file') {
-        //(config.isImageFilePattern.test(filename) || config.isEditableFilePattern.test(filename)) && acts.push('open');
         acts.push('download');
         config.isImageFilePattern.test(filename) && acts.push('open');
         config.isEditableFilePattern.test(filename) && acts.push('edit');
@@ -161,5 +175,27 @@ export const getActionsByFile = (filename, type) => {
     acts.push('perms');
     acts.push('remove');
 
+    return acts;
+}
+
+/**
+ * Calculate available actions for selected files, excluding non coincidences
+ * @param {Array<Object>} files
+ * @returns {Array<String>}
+ */
+export const getActionsByMultipleFiles = (files, acts = []) => {
+    files.forEach(f => {
+        const fileActs = getActionsByFile(f.name, f.type);
+        // intersects previous actions with the following to leave only coincidences
+        acts = acts.length ? acts.filter(value => -1 !== fileActs.indexOf(value)) : fileActs;
+    });
+
+    if (files.length > 1) {
+        acts.splice(acts.indexOf('open'), acts.indexOf('open') >= 0);
+        acts.splice(acts.indexOf('edit'), acts.indexOf('edit') >= 0);
+        acts.splice(acts.indexOf('compress'), acts.indexOf('compress') >= 0);
+        acts.splice(acts.indexOf('download'), acts.indexOf('download') >= 0);
+        acts.push('compress');
+    }
     return acts;
 }

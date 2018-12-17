@@ -8,10 +8,10 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
-import { setFileListFilter } from '../../Actions/Actions.js';
+import { setFileListFilter, enterToPreviousDirectoryByIndex } from '../../Actions/Actions.js';
 import ThreeDotsMenu from './ThreeDotsMenu.jsx';
 import BreadcrumbText from '../Breadcrumb/BreadcrumbText.jsx';
-import { setPath, refreshFileList, enterToPreviousDirectory } from '../../Actions/Actions.js';
+import { enterToPreviousDirectory } from '../../Actions/Actions.js';
 
 const styles = theme => ({
   root: {
@@ -141,13 +141,10 @@ const mapDispatchToProps = (dispatch) => {
          * @param {Array} path
          * @returns {undefined}
          */        
-        handleClickPath: (event, index, path) => {
-            let newPath = Array.from(path);
-            newPath.splice(++index);
-            dispatch(setPath(newPath));
-            dispatch(refreshFileList());
+        handleClickPath: (event, index) => {
+            dispatch(enterToPreviousDirectoryByIndex(index));
             event.preventDefault();
-        },
+        }
     };
 };
 

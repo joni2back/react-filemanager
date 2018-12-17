@@ -1,4 +1,4 @@
-import { getFileList, createFolder, getFileBody, removeFile, moveFile } from '../Api/ApiHandler.js';
+import { getFileList, createFolder, getFileBody, removeFile, moveFile, copyFile } from '../Api/ApiHandler.js';
 
 
 /**
@@ -68,6 +68,31 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
     });
 };
 
+
+/**
+ * Request API to get download file then dispatch defined events
+ * @param {String} fileName
+ * @returns {Function}
+ */
+export const downloadFile = (fileName) => (dispatch, getState) => {
+    const { path } = getState();
+    dispatch(setLoading(true));
+    getFileBody(path.join('/'), fileName).then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        let tempLink = window.document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.setAttribute('download', fileName);
+        tempLink.click();
+        window.URL.revokeObjectURL(blobUrl);
+        dispatch(setLoading(false));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
 
 /**
  * Request API to get file content then dispatch defined events
@@ -165,6 +190,30 @@ export const moveItems = (files) => (dispatch, getState) => {
 
 
 /**
+ * Request API to copy an item then dispatch defined events
+ * @param {Array} filenames
+ * @returns {Function}
+ */
+export const copyItems = (files) => (dispatch, getState) => {
+    const { path, pathSublist, selectedFolderSublist } = getState();
+    const destination = pathSublist.join('/') + '/' + selectedFolderSublist.name;
+    const filenames = files.map(f => f.name);
+
+    dispatch(setLoading(true));
+    copyFile(path.join('/'), destination, filenames).then(r => {
+        dispatch(setLoading(false));
+        dispatch(setVisibleModalCopyFile(false));
+        dispatch(refreshFileList());
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
+
+/**
  * This handles multiple selection by using shift key
  * @param {Object} lastFile
  * @returns {Function}
@@ -204,7 +253,16 @@ export const initSubList = () => (dispatch, getState) => {
 export const enterToPreviousDirectory = () => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setPath(path.slice(0, -1)));
-    dispatch(refreshFileList());    
+    dispatch(setFileListFilter(null));
+    dispatch(refreshFileList());
+};
+
+export const enterToPreviousDirectoryByIndex = (index) => (dispatch, getState) => {
+    const { path } = getState();
+    const newPath = [...path].slice(0, ++index);
+    dispatch(setPath(newPath));
+    dispatch(refreshFileList());
+    dispatch(setFileListFilter(null));
 };
 
 export const enterToPreviousDirectorySublist = () => (dispatch, getState) => {
@@ -232,6 +290,7 @@ export const enterToDirectory = (directory) => (dispatch, getState) => {
         type: 'ENTER_TO_DIRECTORY',
         value: directory
     });
+    dispatch(setFileListFilter(null));
     dispatch(refreshFileList());
 };
 

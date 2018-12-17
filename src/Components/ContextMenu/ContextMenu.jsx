@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ContextMenu.css';
 import Menu from '@material-ui/core/Menu';
-import { getActionsByFile } from '../../Api/ApiHandler.js';
+import { getActionsByMultipleFiles } from '../../Api/ApiHandler.js';
 import OpenAction from './ContextMenuActions/OpenAction.jsx';
 import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
 import MoveAction from './ContextMenuActions/MoveAction.jsx';
 import CopyAction from './ContextMenuActions/CopyAction.jsx';
 import EditAction from './ContextMenuActions/EditAction.jsx';
+import DownloadAction from './ContextMenuActions/DownloadAction.jsx';
 
 class ContextMenu extends Component {
 
@@ -26,6 +27,9 @@ class ContextMenu extends Component {
             }            
             if (act === 'move') {
                 component = <MoveAction key={key} />;
+            }
+            if (act === 'download') {
+                component = <DownloadAction key={key} />;
             }
             if (act === 'remove') {
                 component = <RemoveAction key={key} />;
@@ -52,34 +56,12 @@ class ContextMenu extends Component {
     }
 }
 
-/**
- * Calculate available actions for selected files, excluding non coincidences
- * @param {Array<Object>} selectedFiles
- * @returns {Array<String>}
- */
-export const getActionsBySelectedFiles = (selectedFiles) => {
-    let acts = [];
-    selectedFiles.forEach(f => {
-        const fileActs = getActionsByFile(f.name, f.type);
-        /**
-         * intersects previous actions with the following to leave only coincidences
-         */ 
-        acts = acts.length ? acts.filter(value => -1 !== fileActs.indexOf(value)) : fileActs;
-    });
-
-    if (selectedFiles.length > 1) {
-        acts.splice(acts.indexOf('open'), acts.indexOf('open') >= 0)
-        acts.splice(acts.indexOf('edit'), acts.indexOf('edit') >= 0)
-    }
-    return acts;
-}
-
 const mapStateToProps = (state) => {
     return {
         x: state.contextMenuPosition[0] || 0,
         y: state.contextMenuPosition[1] || 0,
         visible: !!state.contextMenuVisible,
-        acts: getActionsBySelectedFiles(state.selectedFiles),
+        acts: getActionsByMultipleFiles(state.selectedFiles),
     };
 };
 

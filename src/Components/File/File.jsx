@@ -34,7 +34,7 @@ class File extends Component {
                             { type === 'dir' ? <FolderIcon /> : <FileIcon />}
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={name} secondary="" />
+                    <ListItemText className="filename" primary={name} secondary="" />
                 </ListItem>
             </div>
         );

@@ -4,6 +4,7 @@ export default {
     url_list: `${host}/filemanager/list`,
     url_create_folder: `${host}/filemanager/dir/create`,
     url_get_content: `${host}/filemanager/file/content`,
+    url_download: `${host}/filemanager/file/content`,
     url_remove: `${host}/filemanager/item/remove`,
     url_copy: `${host}/filemanager/items/copy`,
     url_move: `${host}/filemanager/items/move`,
