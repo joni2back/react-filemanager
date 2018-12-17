@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    refreshFileList, enterToDirectory, setContextMenuVisible, 
-    toggleSelectedFile, setContextMenuPositionElement,setContextMenuPosition,
-    setSelectedFileFromLastTo, getFileContent, getFileContentForEdit, rightClickOnFile, setSelectedFiles
+    enterToDirectory, setContextMenuVisible, toggleSelectedFile, setContextMenuPosition,
+    setSelectedFileFromLastTo, getFileContent, getFileContentForEdit, 
+    rightClickOnFile, setSelectedFiles
 } from '../../Actions/Actions.js';
 import './File.css';
 

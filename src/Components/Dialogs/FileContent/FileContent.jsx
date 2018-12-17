@@ -23,19 +23,6 @@ class FormDialog extends Component {
             this.setState({
                 loading: true
             });
-
-            // using just for images
-            /*
-            this.props.blobUrl && fetch(this.props.blobUrl).then(r => {
-                return r.text();
-            }).then(t => {
-                this.setState({
-                    content: t
-                });
-                this.setState({
-                    loading: false
-                });
-            });*/
         }
     }
 
@@ -46,7 +33,7 @@ class FormDialog extends Component {
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Viewing file </DialogTitle>
               <DialogContent>
-                <img src={this.props.blobUrl} style={{maxWidth: '100%'}}/>
+                <img src={this.props.blobUrl} alt="" style={{maxWidth: '100%'}}/>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary" type="button">

@@ -57,3 +57,41 @@ export function remove(path, filenames, recursive = true) {
         })
     });
 };
+
+/**
+ * Fetch API to move files
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export function move(path, destination, filenames) {
+    return fetch(config.url_move, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            path, destination, filenames
+        })
+    });
+};
+
+/**
+ * Fetch API to copy files
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export function copy(path, destination, filenames) {
+    return fetch(config.url_copy, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            path, destination, filenames
+        })
+    });
+};

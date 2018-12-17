@@ -28,7 +28,6 @@ const mapStateToProps = (state) => {
         .filter(file => state.path.join('').trim() === state.pathSublist.join('').trim() ? 
             !state.selectedFiles.find(f => f.name === file.name) : true
         );
-
     return {
         fileList: filteredList,
         loadingSublist: state.loadingSublist,

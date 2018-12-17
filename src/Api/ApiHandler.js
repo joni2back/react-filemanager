@@ -1,4 +1,4 @@
-import { list, createDirectory, getFileContent, remove } from './Api.js';
+import { list, createDirectory, getFileContent, remove, move, copy } from './Api.js';
 import config from './../config.js';
 
 const messageTranslation = {
@@ -39,6 +39,9 @@ const handleFetch = (resolve, reject) => {
     }
 }
 
+const fixPath = (path) => {
+    return ('/' + path).replace(/\/\//g, '/');
+};
 
 /**
  * Wrap API response for retrive file liest
@@ -46,7 +49,7 @@ const handleFetch = (resolve, reject) => {
  * @returns {Object}
  */
 export const getFileList = (path) => {
-    path = '/' + path;
+    path = fixPath(path);
     return new Promise((resolve, reject) => {
         return list(path)
             .then(handleFetch(resolve, reject).xthen)
@@ -60,7 +63,7 @@ export const getFileList = (path) => {
  * @returns {Object}
  */
 export const getFileBody = (path, filename) => {
-    path = '/' + path + '/' + filename;
+    path = fixPath(path + '/' + filename);
     return new Promise((resolve, reject) => {
         return getFileContent(path)
             .then(handleFetch(resolve, reject).xthen)
@@ -75,7 +78,7 @@ export const getFileBody = (path, filename) => {
  * @returns {Object}
  */
 export const createFolder = (path, folder) => {
-    path = '/' + path;
+    path = fixPath(path);
     return new Promise((resolve, reject) => {
         return createDirectory(path, folder)
             .then(handleFetch(resolve, reject).xthen)
@@ -91,9 +94,42 @@ export const createFolder = (path, folder) => {
  * @returns {Object}
  */
 export const removeFile = (path, filenames, recursive = true) => {
-    path = '/' + path;
+    path = fixPath(path);
     return new Promise((resolve, reject) => {
         return remove(path, filenames, recursive)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
+    })
+};
+
+/**
+ * Wrap API response for move file or folder
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export const moveFile = (path, destination, filenames) => {
+    path = fixPath(path);
+    destination = fixPath(destination);
+    return new Promise((resolve, reject) => {
+        return move(path, destination, filenames)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
+    })
+};
+
+/**
+ * Wrap API response for copy file or folder
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export const copyFile = (path, destination, filenames) => {
+    path = fixPath(path);
+    return new Promise((resolve, reject) => {
+        return copy(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })

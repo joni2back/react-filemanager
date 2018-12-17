@@ -1,4 +1,4 @@
-import { getFileList, createFolder, getFileBody, removeFile } from '../Api/ApiHandler.js';
+import { getFileList, createFolder, getFileBody, removeFile, moveFile } from '../Api/ApiHandler.js';
 
 
 /**
@@ -30,7 +30,7 @@ export const refreshFileList = () => (dispatch, getState) => {
 export const refreshFileListSublist = () => (dispatch, getState) => {
     const { pathSublist } = getState();
     dispatch(setLoadingSublist(true));
-    dispatch(setSelectedFolderSublist([]));
+    dispatch(setSelectedFolderSublist(null));
 
     getFileList(pathSublist.join('/')).then(r => {
         dispatch(setLoadingSublist(false));
@@ -67,7 +67,6 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
         dispatch(setLoading(false));
     });
 };
-
 
 
 /**
@@ -118,7 +117,7 @@ export const createNewFolder = (createFolderName) => (dispatch, getState) => {
 
 
 /**
- * Request API to create a folder then dispatch defined events
+ * Request API to remove an item then dispatch defined events
  * @param {Array} filenames
  * @returns {Function}
  */
@@ -129,6 +128,31 @@ export const removeItems = (files) => (dispatch, getState) => {
     dispatch(setLoading(true));
     removeFile(path.join('/'), filenames).then(r => {
         dispatch(setLoading(false));
+        dispatch(refreshFileList());
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
+
+
+/**
+ * Request API to move an item then dispatch defined events
+ * @param {Array} filenames
+ * @returns {Function}
+ */
+export const moveItems = (files) => (dispatch, getState) => {
+    const { path, pathSublist, selectedFolderSublist } = getState();
+    const destination = pathSublist.join('/') + '/' + selectedFolderSublist.name;
+    const filenames = files.map(f => f.name);
+
+    dispatch(setLoading(true));
+    moveFile(path.join('/'), destination, filenames).then(r => {
+        dispatch(setLoading(false));
+        dispatch(setVisibleModalMoveFile(false));
         dispatch(refreshFileList());
     }).catch(r => {
         dispatch({
@@ -170,9 +194,10 @@ export const setSelectedFileFromLastTo = (lastFile) => (dispatch, getState) => {
  * @returns {Function}
  */
 export const initSubList = () => (dispatch, getState) => {
+    const { path } = getState();
     dispatch(setSelectedFolderSublist(null));
     dispatch(setFileListSublist([]));    
-    dispatch(setPathSublist([]));
+    dispatch(setPathSublist([...path]));
     dispatch(refreshFileListSublist());
 };
 
