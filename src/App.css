@@ -2,5 +2,5 @@
     width: 100%;
     position: relative;
     display: block;
-    user-select: none;
+    /*user-select: none;*/
 }

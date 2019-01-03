@@ -8,6 +8,7 @@ import DialogEditFile from './Components/Dialogs/EditFile/EditFile.jsx';
 import DialogCreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
 import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';
 import DialogCopyFile from './Components/Dialogs/CopyFile/CopyFile.jsx';
+import DialogUploadFile from './Components/Dialogs/UploadFile/UploadFile.jsx';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -35,6 +36,7 @@ class App extends Component {
                     <DialogCreateFolder />
                     <DialogMoveFile />
                     <DialogCopyFile />
+                    <DialogUploadFile />
                     <ContextMenu />
                     <DynamicSnackbar />
                 </div>
@@ -53,7 +55,9 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(refreshFileList());
     return {
         handleHideContextMenu: (event) => {
-            event.preventDefault();
+            if (! (event.target.tagName == 'INPUT' || /label/i.test(event.target.className))) {
+                event.preventDefault();
+            }
             dispatch(setContextMenuVisible(false));
         }
     };

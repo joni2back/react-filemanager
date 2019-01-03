@@ -5,6 +5,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { connect } from 'react-redux';
 import { setVisibleModalCreateFolder } from '../../Actions/Actions.js';
+import CreateFolderAction from '../ContextMenu/ContextMenuActions/CreateFolderAction.jsx';
+import UploadFileAction from '../ContextMenu/ContextMenuActions/UploadFileAction.jsx';
 
 class ThreeDotsMenu extends React.Component {
   state = {
@@ -19,11 +21,6 @@ class ThreeDotsMenu extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  handleCloseAfter = (callback) => (event) => {
-    callback();
-    this.handleClose()
-  }
-
   render() {
     const { anchorEl } = this.state;
     const { handleOpenCreateFolder } = this.props;
@@ -37,12 +34,9 @@ class ThreeDotsMenu extends React.Component {
           <MoreVertIcon />
         </IconButton>
 
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={this.handleCloseAfter(handleOpenCreateFolder)}>New folder</MenuItem>
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
+          <CreateFolderAction handleClose={this.handleClose} />
+          <UploadFileAction handleClose={this.handleClose} />
         </Menu>
       </div>
     );
@@ -57,10 +51,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        handleOpenCreateFolder: (event) => {
-            dispatch(setVisibleModalCreateFolder(true));
-            return true;
-        },
     };
 };
 

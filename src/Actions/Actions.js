@@ -5,6 +5,27 @@ import { getFileList, createFolder, getFileBody, removeFile, moveFile, copyFile 
  * Request API to get file list for the selected path then refresh UI
  * @returns {Function}
  */
+export const uploadFiles = () => (dispatch, getState) => {
+    const { path } = getState();
+    dispatch(setLoading(true));
+    dispatch(setSelectedFiles([]));
+
+    getFileList(path.join('/')).then(r => {
+        dispatch(setLoading(false));
+        dispatch(setFileList(r));
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
+
+/**
+ * Request API to get file list for the selected path then refresh UI
+ * @returns {Function}
+ */
 export const refreshFileList = () => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
@@ -389,6 +410,13 @@ export const setLoadingSublist = (value) => {
 export const setVisibleModalCreateFolder = (visible) => {
     return {
         type: 'SET_VISIBLE_MODAL_CREATE_FOLDER',
+        value: !!visible
+    };
+};
+
+export const setVisibleModalUploadFile = (visible) => {
+    return {
+        type: 'SET_VISIBLE_MODAL_UPLOAD_FILE',
         value: !!visible
     };
 };

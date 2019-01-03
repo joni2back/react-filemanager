@@ -13,6 +13,7 @@ export const defaultState = {
     loadingSublist: false,
     errorMsg: null,
     visibleModalCreateFolder: false,
+    visibleModalUploadFile: false,
     visibleModalFileContent: false,
     visibleModalFileEdit: false,
     visibleModalMoveFile: false,
@@ -100,6 +101,11 @@ const MainReducer = (state = defaultState, action) => {
         case 'SET_VISIBLE_MODAL_CREATE_FOLDER':
             return Object.assign({}, state, { 
                 visibleModalCreateFolder: !!action.value
+            });
+            
+        case 'SET_VISIBLE_MODAL_UPLOAD_FILE':
+            return Object.assign({}, state, { 
+                visibleModalUploadFile: !!action.value
             });
 
         case 'SET_VISIBLE_MODAL_FILE_CONTENT':
