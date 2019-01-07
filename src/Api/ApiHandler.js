@@ -1,4 +1,4 @@
-import { list, createDirectory, getFileContent, remove, move, copy } from './Api.js';
+import { list, createDirectory, getFileContent, remove, move, copy, upload } from './Api.js';
 import config from './../config.js';
 
 const messageTranslation = {
@@ -146,6 +146,22 @@ export const copyFile = (path, destination, filenames) => {
     destination = fixPath(destination);
     return new Promise((resolve, reject) => {
         return copy(path, destination, filenames)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
+    })
+};
+
+/**
+ * Wrap API response for upload files
+ * @param {String} path
+ * @param {Object<FileList>} fileList
+ * @returns {Object}
+ */
+export const uploadFiles = (path, fileList) => {
+    path = fixPath(path);
+
+    return new Promise((resolve, reject) => {
+        return upload(path, fileList)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })

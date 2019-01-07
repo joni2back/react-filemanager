@@ -95,3 +95,25 @@ export function copy(path, destination, filenames) {
         })
     });
 };
+
+/**
+ * Fetch API to copy files
+ * @param {String} path
+ * @param {Object<FileList>} fileList
+ * @returns {Object}
+ */
+export function upload(path, fileList, formData = new FormData()) {
+    [...fileList].forEach(f => {
+        formData.append('file[]', f);
+    });
+    formData.append('path', path);
+
+    return fetch(config.url_upload, {
+        method: 'POST',
+        body: formData, 
+        headers: {
+            // a workaround for node connector, passing the path by header
+            path: path
+        }
+    });
+};

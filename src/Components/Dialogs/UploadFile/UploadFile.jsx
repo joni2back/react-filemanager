@@ -4,14 +4,15 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { connect } from 'react-redux';
-import { setVisibleModalUploadFile, uploadFiles } from '../../../Actions/Actions.js';
+import { resetFileUploader, uploadFiles, setFileUploadList } from '../../../Actions/Actions.js';
 import FileUploader from '../../FileUploader/FileUploader.jsx';
 
 class FormDialog extends Component {
 
     render() {
-        const { handleClose, handleUpload, open, canUpload } = this.props;
+        const { handleClose, handleReset, handleUpload, open, canUpload, fileUploadProgress, fileUploadList, handleSelectedFiles } = this.props;
 
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -20,7 +21,8 @@ class FormDialog extends Component {
                         Upload files
                     </DialogTitle>
                     <DialogContent>
-                        <FileUploader handleUpload={handleUpload} />
+                        <FileUploader handleUpload={handleUpload} fileUploadList={fileUploadList} handleSelectedFiles={handleSelectedFiles} handleReset={handleReset}/>
+                        <LinearProgress variant="determinate" value={fileUploadProgress} />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary" type="button">
@@ -37,21 +39,31 @@ class FormDialog extends Component {
 }
 
 const mapStateToProps = (state) => {
-    // prevent moving to same folder
-    const canMove = state.path.join('') !== state.pathSublist.join('') + (state.selectedFolderSublist ? state.selectedFolderSublist.name : '');
-
     return {
         open: state.visibleModalUploadFile,
-        canUpload: true,
+        canUpload: state.fileUploadList.length,
+        fileUploadList: state.fileUploadList,
+        fileUploadProgress: state.fileUploadProgress
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
-            dispatch(setVisibleModalUploadFile(false));
+            dispatch(resetFileUploader());
         },
-        handleUpload: (event, selectedFiles) => {
+        handleUpload: (event) => {
+            event.preventDefault();
+            const files = event.currentTarget.form.querySelector('input[type=file]').files;
+            dispatch(uploadFiles(files));
+        },
+        handleSelectedFiles: (event) => {
+            dispatch(setFileUploadList(
+                [...event.target.files].map(f => ({name: f.name, size: f.size}))
+            ));
+        },
+        handleReset: (event) => {
+            dispatch(setFileUploadList([]));
         }
     };
 };

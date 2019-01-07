@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(refreshFileList());
     return {
         handleHideContextMenu: (event) => {
-            if (! (event.target.tagName == 'INPUT' || /label/i.test(event.target.className))) {
+            if (! (event.target.tagName === 'INPUT' || /label/i.test(event.target.className))) {
                 event.preventDefault();
             }
             dispatch(setContextMenuVisible(false));

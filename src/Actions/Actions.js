@@ -1,18 +1,24 @@
-import { getFileList, createFolder, getFileBody, removeFile, moveFile, copyFile } from '../Api/ApiHandler.js';
+import { 
+    getFileList, createFolder, getFileBody, removeFile, moveFile, copyFile, uploadFiles as upload
+} from '../Api/ApiHandler.js';
 
 
 /**
  * Request API to get file list for the selected path then refresh UI
  * @returns {Function}
  */
-export const uploadFiles = () => (dispatch, getState) => {
+export const uploadFiles = (fileList) => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
     dispatch(setSelectedFiles([]));
+    dispatch(setFileUploadProgress(50));
 
-    getFileList(path.join('/')).then(r => {
-        dispatch(setLoading(false));
-        dispatch(setFileList(r));
+    upload(path.join('/'), fileList).then(r => {
+        dispatch(setFileUploadProgress(100));
+        setTimeout(f => {
+            dispatch(resetFileUploader());
+        }, 300);
+        dispatch(refreshFileList());
     }).catch(r => {
         dispatch({
             type: 'SET_ERROR_MSG',
@@ -271,6 +277,12 @@ export const initSubList = () => (dispatch, getState) => {
     dispatch(refreshFileListSublist());
 };
 
+export const resetFileUploader = () => (dispatch, getState) => {
+    dispatch(setFileUploadProgress(0));
+    dispatch(setVisibleModalUploadFile(false));
+    dispatch(setFileUploadList([]));
+};
+
 export const enterToPreviousDirectory = () => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setPath(path.slice(0, -1)));
@@ -449,7 +461,6 @@ export const setVisibleModalFileEdit = (visible) => {
     };
 };
 
-
 export const setFileContent = (blob) => {
    return {
         type: 'SET_FILE_CONTENT',
@@ -457,3 +468,16 @@ export const setFileContent = (blob) => {
     };
 };
 
+export const setFileUploadProgress = (percentage) => {
+   return {
+        type: 'SET_FILE_UPLOAD_PROGRESS',
+        value: percentage
+    };
+};
+
+export const setFileUploadList = (files) => {
+   return {
+        type: 'SET_FILE_UPLOAD_LIST',
+        value: files
+    };
+};

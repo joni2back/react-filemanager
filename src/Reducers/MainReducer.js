@@ -18,7 +18,9 @@ export const defaultState = {
     visibleModalFileEdit: false,
     visibleModalMoveFile: false,
     visibleModalCopyFile: false,
-    fileContentBlobUrl: null
+    fileContentBlobUrl: null,
+    fileUploadProgress: 0,
+    fileUploadList: []
 };
 
 /**
@@ -53,7 +55,6 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 fileListSublist: action.value.sort((a, b) => a.type < b.type ? -1 : a.name.toLowerCase() > b.name.toLowerCase())
             });
-
         case 'SET_FILE_LIST_FILTER':
             return Object.assign({}, state, { 
                 fileListFilter: action.value
@@ -84,6 +85,10 @@ const MainReducer = (state = defaultState, action) => {
                 selectedFiles: state.selectedFiles.find(f => f.name === action.value.name) ?
                     state.selectedFiles.filter(f => f.name !== action.value.name) :
                     [...state.selectedFiles, action.value]
+            });
+        case 'SET_FILE_UPLOAD_PROGRESS':
+            return Object.assign({}, state, {
+                fileUploadProgress: parseInt(action.value || 0)
             });
         case 'SET_LOADING':
             return Object.assign({}, state, { 
@@ -126,6 +131,11 @@ const MainReducer = (state = defaultState, action) => {
             return Object.assign({}, state, { 
                 visibleModalCopyFile: !!action.value
             });
+        case 'SET_FILE_UPLOAD_LIST':
+            return Object.assign({}, state, {
+                fileUploadList: action.value
+            });
+
         case 'SET_FILE_CONTENT':
             /**
              * Removing old blob url
