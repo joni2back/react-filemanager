@@ -12,13 +12,13 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 class FormDialog extends Component {
 
     render() {
-        const { handleClose, handleSave, open, selectedFiles, selectedFolderSublist, canGoBack, canMove, handleGoBack } = this.props;
-
+        const { pathSublist, handleClose, handleSave, open, selectedFiles, selectedFolderSublist, canGoBack, canMove, handleGoBack } = this.props;
+        const selectedPath = selectedFolderSublist ? pathSublist.join('/') + '/' + selectedFolderSublist.name : '';
         return (
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-move" fullWidth={true} maxWidth={'sm'}>
                 <form>
-                    <DialogTitle id="form-dialog-title">
-                        Move files to <span style={{color: 'grey'}}>{ selectedFolderSublist ? selectedFolderSublist.name : '' }</span>
+                    <DialogTitle id="form-dialog-move">
+                        Move files to <small style={{color: 'grey'}}>{ selectedPath }</small>
                     </DialogTitle>
                     <DialogContent>
                         <FileListSublist />
@@ -49,6 +49,7 @@ const mapStateToProps = (state) => {
         open: state.visibleModalMoveFile,
         selectedFolderSublist: state.selectedFolderSublist,
         canGoBack: state.pathSublist.length,
+        pathSublist: state.pathSublist,
         canMove: state.selectedFolderSublist && canMove,
         selectedFiles: state.selectedFiles
     };

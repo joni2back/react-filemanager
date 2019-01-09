@@ -15,9 +15,9 @@ class FormDialog extends Component {
         const { handleClose, handleSave, open, selectedFolderSublist, canGoBack, canCopy, selectedFiles, handleGoBack } = this.props;
 
         return (
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-copy" fullWidth={true} maxWidth={'sm'}>
                 <form>
-                    <DialogTitle id="form-dialog-title">
+                    <DialogTitle id="form-dialog-copy">
                         Copy files to <span style={{color: 'grey'}}>{ selectedFolderSublist ? selectedFolderSublist.name : '' }</span>
                     </DialogTitle>
                     <DialogContent>

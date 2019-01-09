@@ -16,7 +16,9 @@ const handleFetch = (resolve, reject) => {
     return {
         xthen: (response) => {
             const contentType = response.headers.get('content-type');
+            const contentDisp = response.headers.get('content-disposition');
             const isJson = /(application|text)\/json/.test(contentType);
+            const isAttachment = /attachment/.test(contentDisp);
 
             if (! response.ok) {
                 if (isJson) {
@@ -25,15 +27,21 @@ const handleFetch = (resolve, reject) => {
                 throw Error(messageTranslation['unknown_response']);
             }
 
+            if (isAttachment) {
+                response.blob().then(blob => {
+                    resolve(blob);
+                });
+                return;
+            }
+
             if (isJson) {
                 response.json().then(json => {
-                    resolve(json);
+                    if (! json.success) {
+                        throw new Error();
+                    }
+                    resolve(json.data);
                 });
-            } else {
-                // is file content to view
-                response.blob().then(blob => {
-                    return resolve(blob);
-                });
+                return;
             }
         },
         xcatch: (errorResponse) => {
@@ -95,6 +103,9 @@ export const getFileBody = (path, filename) => {
 export const createFolder = (path, folder) => {
     path = fixPath(path);
     return new Promise((resolve, reject) => {
+        if (! (folder || '').trim()) {
+            return reject('Invalid folder name');
+        }
         return createDirectory(path, folder)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
@@ -111,6 +122,9 @@ export const createFolder = (path, folder) => {
 export const removeFile = (path, filenames, recursive = true) => {
     path = fixPath(path);
     return new Promise((resolve, reject) => {
+        if (! filenames.length) {
+            return reject('No files to remove');
+        }
         return remove(path, filenames, recursive)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
@@ -128,6 +142,9 @@ export const moveFile = (path, destination, filenames) => {
     path = fixPath(path);
     destination = fixPath(destination);
     return new Promise((resolve, reject) => {
+        if (! filenames.length) {
+            return reject('No files to move');
+        }
         return move(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
@@ -145,6 +162,9 @@ export const copyFile = (path, destination, filenames) => {
     path = fixPath(path);
     destination = fixPath(destination);
     return new Promise((resolve, reject) => {
+        if (! filenames.length) {
+            return reject('No files to copy');
+        }
         return copy(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
@@ -161,6 +181,9 @@ export const uploadFiles = (path, fileList) => {
     path = fixPath(path);
 
     return new Promise((resolve, reject) => {
+        if (! fileList.length) {
+            return reject('No files to upload');
+        }
         return upload(path, fileList)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)

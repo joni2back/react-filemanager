@@ -41,6 +41,7 @@ export const refreshFileList = () => (dispatch, getState) => {
         dispatch(setLoading(false));
         dispatch(setFileList(r));
     }).catch(r => {
+        dispatch(setFileList([]));
         dispatch({
             type: 'SET_ERROR_MSG',
             value: r.toString()
@@ -63,6 +64,7 @@ export const refreshFileListSublist = () => (dispatch, getState) => {
         dispatch(setLoadingSublist(false));
         dispatch(setFileListSublist(r));
     }).catch(r => {
+        dispatch(setFileListSublist([]));
         dispatch({
             type: 'SET_ERROR_MSG',
             value: r.toString()
@@ -105,6 +107,7 @@ export const downloadFile = (fileName) => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
     getFileBody(path.join('/'), fileName).then(blob => {
+        // TODO workaround large files disables ui for long time
         const blobUrl = window.URL.createObjectURL(blob);
         let tempLink = window.document.createElement('a');
         tempLink.href = blobUrl;

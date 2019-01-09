@@ -30,8 +30,8 @@ class FormDialog extends Component {
         const { handleClose, open } = this.props;
         return (
           <div style={{marginLeft:'1em'}}>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Viewing file </DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-content" fullWidth={true} maxWidth={'sm'}>
+              <DialogTitle id="form-dialog-content">Viewing file </DialogTitle>
               <DialogContent>
                 <img src={this.props.blobUrl} alt="" style={{maxWidth: '100%'}}/>
               </DialogContent>

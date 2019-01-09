@@ -11,32 +11,20 @@ import { createNewFolder, setVisibleModalCreateFolder } from '../../../Actions/A
 class FormDialog extends Component {
 
     render() {
-        const { handleChange, handleClose, handleSave, value, open } = this.props;
+        const { submitForm, handleClose, handleSave, value, open } = this.props;
 
         return (
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="form-dialog-title">
-                <form onSubmit={handleSave}>
-                  <DialogTitle id="form-dialog-title">Create folder</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-create-folder" fullWidth={true} maxWidth={'sm'}>
+                <form>
+                  <DialogTitle id="form-dialog-create-folder">Create folder</DialogTitle>
                   <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Filename"
-                      type="text"
-                      value={value}
-                      onChange={handleChange}
-                      fullWidth
-                    />
+                    <TextField autoFocus fullWidth margin="dense" label="Folder name" type="text" value={value} />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} color="primary" type="button">
                       Cancel
                     </Button>
-                    <Button color="primary" onClick={handleSave} type="submit">
+                    <Button color="primary" type="submit" onClick={handleSave}>
                       Save
                     </Button>
                   </DialogActions>
@@ -55,10 +43,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        handleClose: (event) => {
+        handleClose: event => {
             dispatch(setVisibleModalCreateFolder(false));
         },
-        handleSave: (event) => {
+        handleSave: event => {
+            event.preventDefault();
             const folderName = event.currentTarget.form.querySelector('input').value;
             dispatch(createNewFolder(folderName));
         }

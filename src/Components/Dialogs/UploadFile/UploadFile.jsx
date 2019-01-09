@@ -15,14 +15,14 @@ class FormDialog extends Component {
         const { handleClose, handleReset, handleUpload, open, canUpload, fileUploadProgress, fileUploadList, handleSelectedFiles } = this.props;
 
         return (
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-upload" fullWidth={true} maxWidth={'sm'}>
                 <form>
-                    <DialogTitle id="form-dialog-title">
+                    <DialogTitle id="form-dialog-upload">
                         Upload files
                     </DialogTitle>
                     <DialogContent>
                         <FileUploader handleUpload={handleUpload} fileUploadList={fileUploadList} handleSelectedFiles={handleSelectedFiles} handleReset={handleReset}/>
-                        <LinearProgress variant="determinate" value={fileUploadProgress} />
+                        {canUpload ? <LinearProgress variant="determinate" value={fileUploadProgress} /> : null }
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary" type="button">

@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
 import { setVisibleModalFileEdit } from '../../../Actions/Actions.js';
@@ -40,18 +41,19 @@ class FormDialog extends Component {
     render() {
         const { handleClose, handleSave, open } = this.props;
         const textAreaStyle = {
-            maxWidth: '99%',
-            minWidth: '450px',
+            width: '100%',
             minHeight: '300px'
         };
         const textArea = <textarea style={textAreaStyle} defaultValue={this.state.content || ''} />;
 
         return (
           <div>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Editing file </DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-edit" fullWidth={true} maxWidth={'sm'}>
+              <DialogTitle id="form-dialog-edit">Editing file </DialogTitle>
               <DialogContent>
-                { this.state.loading ? 'Loading...' : textArea }
+                  <DialogContentText>
+                    { this.state.loading ? 'Loading...' : textArea }
+                  </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary" type="button">
