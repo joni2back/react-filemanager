@@ -45,7 +45,7 @@ DynamicSnackbar.propTypes = {
 };
 
 
-const mapStateToProps = (state, ownState) => {
+const mapStateToProps = (state, ownProps) => {
     return {
         open: !!state.errorMsg,
         errorMsg: state.errorMsg,
@@ -53,7 +53,7 @@ const mapStateToProps = (state, ownState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch, ownState) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
             dispatch({

@@ -40,21 +40,21 @@ class FileSublist extends Component {
 }
 
 
-const mapStateToProps = (state, ownState) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        filePath: [...state.path, ownState.name],
-        isSelected: state.selectedFolderSublist && (state.selectedFolderSublist.name === ownState.name)
+        filePath: [...state.path, ownProps.name],
+        isSelected: state.selectedFolderSublist && (state.selectedFolderSublist.name === ownProps.name)
     };
 };
 
-const mapDispatchToProps = (dispatch, ownState) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         /**
          * @param {Object} event
          * @returns {undefined}
          */
         handleDoubleClick: (event) => {
-            dispatch(enterToDirectorySublist(ownState.name));
+            dispatch(enterToDirectorySublist(ownProps.name));
             dispatch(setSelectedFolderSublist(null));
         },
 
@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch, ownState) => {
          */
         handleClick: (event) => {
             event.stopPropagation(); 
-            dispatch(setSelectedFolderSublist(ownState));
+            dispatch(setSelectedFolderSublist(ownProps));
         }
     };
 };

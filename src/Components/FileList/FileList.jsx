@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import File from '../File/File.jsx'; 
 import { connect } from 'react-redux';
-import './FileList.css';
+import File from '../File/File.jsx'; 
 import FileListEmptyMessage from './FileListEmptyMessage';
 import Loader from '../Loader/Loader.jsx'; 
+import './FileList.css';
 
 class FileList extends Component {
     render() {
         const { fileList, loading } = this.props;
         
         const fileListComponent = fileList.map((file, key) => {
-            return <File type={file.type} name={file.name} key={key} />
+            return <File type={file.type} name={file.name} editable={file.editable} key={key} />
         });
 
         return <div className="FileList">

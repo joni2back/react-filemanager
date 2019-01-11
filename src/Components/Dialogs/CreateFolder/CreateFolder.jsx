@@ -11,7 +11,7 @@ import { createNewFolder, setVisibleModalCreateFolder } from '../../../Actions/A
 class FormDialog extends Component {
 
     render() {
-        const { submitForm, handleClose, handleSave, value, open } = this.props;
+        const { handleClose, handleSave, value, open } = this.props;
 
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-create-folder" fullWidth={true} maxWidth={'sm'}>

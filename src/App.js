@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
@@ -10,25 +9,31 @@ import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';
 import DialogCopyFile from './Components/Dialogs/CopyFile/CopyFile.jsx';
 import DialogUploadFile from './Components/Dialogs/UploadFile/UploadFile.jsx';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider as MaterialUI, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { connect } from 'react-redux';
 import { setContextMenuVisible, refreshFileList } from './Actions/Actions.js';
 import DynamicSnackbar from './Components/Notification/DynamicSnackbar.jsx'; 
 
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+    },
+    typography: {
+        useNextVariants: true,
+    }
+});
+
 class App extends Component {
+
+    componentDidMount() {
+        this.props.init();
+    };
+
     render() {
-        const theme = createMuiTheme({
-            palette: {
-                primary: blue,
-            },
-            typography: {
-                useNextVariants: true,
-            }
-        });
         return (
-            <MuiThemeProvider theme={theme}>
-                <div className="App" onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
+            <MaterialUI theme={theme}>
+                <div onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
                     <Navbar />
                     <FileList />
                     <DialogFileContent />
@@ -40,20 +45,22 @@ class App extends Component {
                     <ContextMenu />
                     <DynamicSnackbar />
                 </div>
-            </MuiThemeProvider>
+            </MaterialUI>
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.loading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    dispatch(refreshFileList());
     return {
+        init: () => {
+            dispatch(refreshFileList());
+        },
+
         handleHideContextMenu: (event) => {
             if (! (event.target.tagName === 'INPUT' || /label/i.test(event.target.className))) {
                 event.preventDefault();

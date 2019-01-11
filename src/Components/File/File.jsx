@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
     enterToDirectory, setContextMenuVisible, toggleSelectedFile, setContextMenuPosition,
@@ -7,7 +8,6 @@ import {
 } from '../../Actions/Actions.js';
 import './File.css';
 
-import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -16,9 +16,6 @@ import FolderIcon from '@material-ui/icons/Folder';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import blue from '@material-ui/core/colors/blue';
 import config from '../../config.js';
-
-const styles = theme => ({
-});
 
 class File extends Component {
     render() {
@@ -42,30 +39,30 @@ class File extends Component {
 }
 
 
-const mapStateToProps = (state, ownState) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        filePath: [...state.path, ownState.name],
-        isSelected: !!state.selectedFiles.find(f => f.name === ownState.name)
+        filePath: [...state.path, ownProps.name],
+        isSelected: !!state.selectedFiles.find(f => f.name === ownProps.name)
     };
 };
 
-const mapDispatchToProps = (dispatch, ownState) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         /**
          * @param {Object} event
          * @returns {undefined}
          */
         handleDoubleClick: (event) => {
-            if (ownState.type === 'file') {
-                if (config.isEditableFilePattern.test(ownState.name)) {
-                    dispatch(getFileContentForEdit(ownState.name));
-                } else if (config.isImageFilePattern.test(ownState.name)) {
-                    dispatch(getFileContent(ownState.name));
+            if (ownProps.type === 'file') {
+                if (config.isEditableFilePattern.test(ownProps.name) || ownProps.editable) {
+                    dispatch(getFileContentForEdit(ownProps.name));
+                } else if (config.isImageFilePattern.test(ownProps.name)) {
+                    dispatch(getFileContent(ownProps.name));
                 }
                 return;
             }
 
-            dispatch(enterToDirectory(ownState.name));
+            dispatch(enterToDirectory(ownProps.name));
         },
 
         /**
@@ -80,9 +77,9 @@ const mapDispatchToProps = (dispatch, ownState) => {
             const y = event.clientY || (event.touches && event.touches[0].pageY);
 
             if (event.shiftKey) {
-                dispatch(setSelectedFileFromLastTo(ownState));
+                dispatch(setSelectedFileFromLastTo(ownProps));
             } else {
-                dispatch(rightClickOnFile(ownState));
+                dispatch(rightClickOnFile(ownProps));
             }
             
             dispatch(setContextMenuVisible(true));
@@ -97,15 +94,23 @@ const mapDispatchToProps = (dispatch, ownState) => {
             event.stopPropagation();
 
             if (event.ctrlKey) {
-                dispatch(toggleSelectedFile(ownState));
+                dispatch(toggleSelectedFile(ownProps));
             } else if (event.shiftKey) {
-                dispatch(setSelectedFileFromLastTo(ownState));
+                dispatch(setSelectedFileFromLastTo(ownProps));
             } else {
-                dispatch(setSelectedFiles([ownState]));
+                dispatch(setSelectedFiles([ownProps]));
             }
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(File));
+File.propTypes = {
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    editable: PropTypes.oneOfType([
+        PropTypes.bool, PropTypes.number
+    ])
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(File);
 

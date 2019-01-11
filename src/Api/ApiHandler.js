@@ -192,21 +192,31 @@ export const uploadFiles = (path, fileList) => {
 
 /**
  * Calculate available actions for a file
- * @param {String} filename
- * @param {String} type
+ * @param {Object} file
  * @returns {Array<String>}
  */
-export const getActionsByFile = (filename, type, acts = []) => {
-    if (type === 'dir') {
+export const getActionsByFile = (file, acts = []) => {
+    if (file.type === 'dir') {
         acts.push('open');
-        acts.push('compress');
+
+        typeof file.compressible !== 'undefined' ?
+            file.compressible && acts.push('compress'):
+            acts.push('compress');
     }
 
-    if (type === 'file') {
+    if (file.type === 'file') {
         acts.push('download');
-        config.isImageFilePattern.test(filename) && acts.push('open');
-        config.isEditableFilePattern.test(filename) && acts.push('edit');
-        config.isExtractableFilePattern.test(filename) && acts.push('extract');
+        config.isImageFilePattern.test(file.name) && acts.push('open');
+
+        console.log(file);
+        typeof file.editable !== 'undefined' ?
+            file.editable && acts.push('edit'):
+            config.isEditableFilePattern.test(file.name) && acts.push('edit');
+        
+        typeof file.extractable !== 'undefined' ?
+            file.extractable && acts.push('extract'):
+            config.isExtractableFilePattern.test(file.name) && acts.push('extract');
+
         acts.push('copy');
     }
 
@@ -223,8 +233,8 @@ export const getActionsByFile = (filename, type, acts = []) => {
  * @returns {Array<String>}
  */
 export const getActionsByMultipleFiles = (files, acts = []) => {
-    files.forEach(f => {
-        const fileActs = getActionsByFile(f.name, f.type);
+    files.forEach(file => {
+        const fileActs = getActionsByFile(file);
         // intersects previous actions with the following to leave only coincidences
         acts = acts.length ? acts.filter(value => -1 !== fileActs.indexOf(value)) : fileActs;
     });
