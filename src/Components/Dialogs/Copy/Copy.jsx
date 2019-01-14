@@ -5,20 +5,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
-import { setVisibleModalMoveFile, setSelectedFolderSublist, enterToPreviousDirectorySublist, moveItems } from '../../../Actions/Actions.js';
+import { setVisibleDialogCopy, setSelectedFolderSublist, enterToPreviousDirectorySublist, copyItems } from '../../../Actions/Actions.js';
 import FileListSublist from '../../FileList/FileListSublist/FileListSublist.jsx'; 
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 
 class FormDialog extends Component {
 
     render() {
-        const { pathSublist, handleClose, handleSave, open, selectedFiles, selectedFolderSublist, canGoBack, canMove, handleGoBack } = this.props;
-        const selectedPath = selectedFolderSublist ? pathSublist.join('/') + '/' + selectedFolderSublist.name : '';
+        const { 
+            selectedPath, handleClose, handleSave, open, 
+            canGoBack, canCopy, selectedFiles, handleGoBack 
+        } = this.props;
+
         return (
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-move" fullWidth={true} maxWidth={'sm'}>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-copy" fullWidth={true} maxWidth={'sm'}>
                 <form>
-                    <DialogTitle id="form-dialog-move">
-                        Move files to <small style={{color: 'grey'}}>{ selectedPath }</small>
+                    <DialogTitle id="form-dialog-copy">
+                        Copy files to <small style={{color: 'grey'}}>{ selectedPath.join('/') }</small>
                     </DialogTitle>
                     <DialogContent>
                         <FileListSublist />
@@ -31,8 +34,8 @@ class FormDialog extends Component {
                         <Button onClick={handleClose} color="primary" type="button">
                             Cancel
                         </Button>
-                        <Button color="primary" onClick={(e) => handleSave(e, selectedFiles)} disabled={!canMove} type="submit">
-                            Move
+                        <Button color="primary" onClick={(e) => handleSave(e, selectedFiles)} disabled={!canCopy} type="submit">
+                            Copy
                         </Button>
                     </DialogActions>
                 </form>
@@ -42,15 +45,15 @@ class FormDialog extends Component {
 }
 
 const mapStateToProps = (state) => {
-    // prevent moving to same folder
-    const canMove = state.path.join('') !== state.pathSublist.join('') + (state.selectedFolderSublist ? state.selectedFolderSublist.name : '');
+    // prevent copying to same folder
+    const canCopy = state.path.join('') !== state.pathSublist.join('') + (state.selectedFolderSublist ? state.selectedFolderSublist.name : '');
 
     return {
-        open: state.visibleModalMoveFile,
+        open: state.visibleDialogCopy,
         selectedFolderSublist: state.selectedFolderSublist,
+        selectedPath: state.selectedFolderSublist ? [...state.pathSublist, state.selectedFolderSublist.name] : [],
         canGoBack: state.pathSublist.length,
-        pathSublist: state.pathSublist,
-        canMove: state.selectedFolderSublist && canMove,
+        canCopy: state.selectedFolderSublist && canCopy,
         selectedFiles: state.selectedFiles
     };
 };
@@ -59,10 +62,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
             dispatch(setSelectedFolderSublist(null));
-            dispatch(setVisibleModalMoveFile(false));
+            dispatch(setVisibleDialogCopy(false));
         },
         handleSave: (event, selectedFiles) => {
-            dispatch(moveItems(selectedFiles));
+            dispatch(copyItems(selectedFiles));
         },
         handleGoBack: (event) => {
             dispatch(setSelectedFolderSublist(null));

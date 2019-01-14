@@ -1,4 +1,4 @@
-import { list, createDirectory, getFileContent, remove, move, copy, upload } from './Api.js';
+import * as API from './Api.js';
 import config from './../config.js';
 
 const messageTranslation = {
@@ -74,7 +74,7 @@ const fixPath = (path) => {
 export const getFileList = (path) => {
     path = fixPath(path);
     return new Promise((resolve, reject) => {
-        return list(path)
+        return API.list(path)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -88,7 +88,24 @@ export const getFileList = (path) => {
 export const getFileBody = (path, filename) => {
     path = fixPath(path + '/' + filename);
     return new Promise((resolve, reject) => {
-        return getFileContent(path)
+        return API.getFileContent(path)
+            .then(handleFetch(resolve, reject).xthen)
+            .catch(handleFetch(resolve, reject).xcatch)
+    })
+};
+
+
+/**
+ * Wrap API response for retrive file content
+ * @param {String} path
+ * @returns {Object}
+ */
+export const renameItem = (path, filename, newFileName) => {
+    const oldPath = fixPath(path + '/' + filename);
+    const newPath = fixPath(path + '/' + newFileName);
+
+    return new Promise((resolve, reject) => {
+        return API.rename(oldPath, newPath)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -106,7 +123,7 @@ export const createFolder = (path, folder) => {
         if (! (folder || '').trim()) {
             return reject('Invalid folder name');
         }
-        return createDirectory(path, folder)
+        return API.createDirectory(path, folder)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -119,13 +136,13 @@ export const createFolder = (path, folder) => {
  * @param {Boolean} recursive
  * @returns {Object}
  */
-export const removeFile = (path, filenames, recursive = true) => {
+export const removeItems = (path, filenames, recursive = true) => {
     path = fixPath(path);
     return new Promise((resolve, reject) => {
         if (! filenames.length) {
             return reject('No files to remove');
         }
-        return remove(path, filenames, recursive)
+        return API.remove(path, filenames, recursive)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -138,14 +155,14 @@ export const removeFile = (path, filenames, recursive = true) => {
  * @param {Boolean} recursive
  * @returns {Object}
  */
-export const moveFile = (path, destination, filenames) => {
+export const moveItems = (path, destination, filenames) => {
     path = fixPath(path);
     destination = fixPath(destination);
     return new Promise((resolve, reject) => {
         if (! filenames.length) {
             return reject('No files to move');
         }
-        return move(path, destination, filenames)
+        return API.move(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -158,14 +175,14 @@ export const moveFile = (path, destination, filenames) => {
  * @param {Boolean} recursive
  * @returns {Object}
  */
-export const copyFile = (path, destination, filenames) => {
+export const copyItems = (path, destination, filenames) => {
     path = fixPath(path);
     destination = fixPath(destination);
     return new Promise((resolve, reject) => {
         if (! filenames.length) {
             return reject('No files to copy');
         }
-        return copy(path, destination, filenames)
+        return API.copy(path, destination, filenames)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -184,7 +201,7 @@ export const uploadFiles = (path, fileList) => {
         if (! fileList.length) {
             return reject('No files to upload');
         }
-        return upload(path, fileList)
+        return API.upload(path, fileList)
             .then(handleFetch(resolve, reject).xthen)
             .catch(handleFetch(resolve, reject).xcatch)
     })
@@ -208,7 +225,6 @@ export const getActionsByFile = (file, acts = []) => {
         acts.push('download');
         config.isImageFilePattern.test(file.name) && acts.push('open');
 
-        console.log(file);
         typeof file.editable !== 'undefined' ?
             file.editable && acts.push('edit'):
             config.isEditableFilePattern.test(file.name) && acts.push('edit');
@@ -221,6 +237,7 @@ export const getActionsByFile = (file, acts = []) => {
     }
 
     acts.push('move');
+    acts.push('rename');
     acts.push('perms');
     acts.push('remove');
 
@@ -244,7 +261,18 @@ export const getActionsByMultipleFiles = (files, acts = []) => {
         acts.splice(acts.indexOf('edit'), acts.indexOf('edit') >= 0);
         acts.splice(acts.indexOf('compress'), acts.indexOf('compress') >= 0);
         acts.splice(acts.indexOf('download'), acts.indexOf('download') >= 0);
+        acts.splice(acts.indexOf('rename'), acts.indexOf('rename') >= 0);
         acts.push('compress');
     }
     return acts;
 }
+
+/**
+ * Calculate file size by bytes in human readable format
+ * @param {Number} bytes
+ * @returns {String}
+ */
+export const getHumanFileSize = (bytes) => {
+    const e = (Math.log(bytes) / Math.log(1e3)) | 0;
+    return +(bytes / Math.pow(1e3, e)).toFixed(2) + ' ' + ('kMGTPEZY'[e - 1] || '') + 'B';
+};

@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import FileList from './Components/FileList/FileList.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ContextMenu from './Components/ContextMenu/ContextMenu.jsx';
-import DialogFileContent from './Components/Dialogs/FileContent/FileContent.jsx';
-import DialogEditFile from './Components/Dialogs/EditFile/EditFile.jsx';
-import DialogCreateFolder from './Components/Dialogs/CreateFolder/CreateFolder.jsx';
-import DialogMoveFile from './Components/Dialogs/MoveFile/MoveFile.jsx';
-import DialogCopyFile from './Components/Dialogs/CopyFile/CopyFile.jsx';
-import DialogUploadFile from './Components/Dialogs/UploadFile/UploadFile.jsx';
+import Dialogs from './Components/Dialogs/Dialogs.jsx';
 
 import { MuiThemeProvider as MaterialUI, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -36,14 +31,9 @@ class App extends Component {
                 <div onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
                     <Navbar />
                     <FileList />
-                    <DialogFileContent />
-                    <DialogEditFile />
-                    <DialogCreateFolder />
-                    <DialogMoveFile />
-                    <DialogCopyFile />
-                    <DialogUploadFile />
                     <ContextMenu />
                     <DynamicSnackbar />
+                    <Dialogs />
                 </div>
             </MaterialUI>
         );

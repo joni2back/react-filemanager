@@ -3,8 +3,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import HowToVoteIcon from '@material-ui/icons/HowToVote';
-import { initSubList, setVisibleDialogMove } from '../../../Actions/Actions.js';
+import WrapTextIcon from '@material-ui/icons/WrapText';
+import { setVisibleDialogRename } from '../../../Actions/Actions.js';
 
 function MoveAction(props) {
     const {handleClick, selectedFiles} = props;
@@ -12,10 +12,10 @@ function MoveAction(props) {
     return (
         <MenuItem onClick={(e) => handleClick(e, selectedFiles)}>
             <ListItemIcon>
-                <HowToVoteIcon />
+                <WrapTextIcon />
             </ListItemIcon>
             <Typography variant="inherit">
-                Move
+                Rename
             </Typography>
         </MenuItem>        
     );
@@ -30,8 +30,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event, selectedFiles) => {
-            dispatch(initSubList());
-            dispatch(setVisibleDialogMove(true));
+            dispatch(setVisibleDialogRename(true));
         }
     };
 };

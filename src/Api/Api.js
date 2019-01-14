@@ -78,6 +78,25 @@ export function move(path, destination, filenames) {
 };
 
 /**
+ * Fetch API to move files
+ * @param {String} path
+ * @param {Array} filenames
+ * @param {Boolean} recursive
+ * @returns {Object}
+ */
+export function rename(path, destination) {
+    return fetch(config.url_rename, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            path, destination
+        })
+    });
+};
+
+/**
  * Fetch API to copy files
  * @param {String} path
  * @param {Array} filenames

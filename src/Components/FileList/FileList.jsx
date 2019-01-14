@@ -10,7 +10,7 @@ class FileList extends Component {
         const { fileList, loading } = this.props;
         
         const fileListComponent = fileList.map((file, key) => {
-            return <File type={file.type} name={file.name} editable={file.editable} key={key} />
+            return <File type={file.type} name={file.name} editable={file.editable} size={file.size} key={key} />
         });
 
         return <div className="FileList">

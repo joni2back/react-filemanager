@@ -12,12 +12,13 @@ export const defaultState = {
     loading: false,
     loadingSublist: false,
     errorMsg: null,
-    visibleModalCreateFolder: false,
-    visibleModalUploadFile: false,
-    visibleModalFileContent: false,
-    visibleModalFileEdit: false,
-    visibleModalMoveFile: false,
-    visibleModalCopyFile: false,
+    visibleDialogCreateFolder: false,
+    visibleDialogUploadFile: false,
+    visibleDialogContent: false,
+    visibleDialogEdit: false,
+    visibleDialogMove: false,
+    visibleDialogCopy: false,
+    visibleDialogRename: false,
     fileContentBlobUrl: null,
     fileUploadProgress: 0,
     fileUploadList: []
@@ -103,33 +104,37 @@ const MainReducer = (state = defaultState, action) => {
                 errorMsg: action.value
             });
 
-        case 'SET_VISIBLE_MODAL_CREATE_FOLDER':
+        case 'SET_VISIBLE_DIALOG_CREATE_FOLDER':
             return Object.assign({}, state, { 
-                visibleModalCreateFolder: !!action.value
+                visibleDialogCreateFolder: !!action.value
             });
             
-        case 'SET_VISIBLE_MODAL_UPLOAD_FILE':
+        case 'SET_VISIBLE_DIALOG_UPLOAD_FILE':
             return Object.assign({}, state, { 
-                visibleModalUploadFile: !!action.value
+                visibleDialogUploadFile: !!action.value
             });
 
-        case 'SET_VISIBLE_MODAL_FILE_CONTENT':
+        case 'SET_VISIBLE_DIALOG_CONTENT':
             return Object.assign({}, state, { 
-                visibleModalFileContent: !!action.value
+                visibleDialogContent: !!action.value
             });
 
-        case 'SET_VISIBLE_MODAL_FILE_EDIT':
+        case 'SET_VISIBLE_DIALOG_EDIT':
             return Object.assign({}, state, { 
-                visibleModalFileEdit: !!action.value
+                visibleDialogEdit: !!action.value
             });
 
-        case 'SET_VISIBLE_MODAL_MOVE_FILE':
+        case 'SET_VISIBLE_DIALOG_MOVE':
             return Object.assign({}, state, { 
-                visibleModalMoveFile: !!action.value
+                visibleDialogMove: !!action.value
             });
-        case 'SET_VISIBLE_MODAL_COPY_FILE':
+        case 'SET_VISIBLE_DIALOG_COPY':
             return Object.assign({}, state, { 
-                visibleModalCopyFile: !!action.value
+                visibleDialogCopy: !!action.value
+            });
+        case 'SET_VISIBLE_DIALOG_RENAME':
+            return Object.assign({}, state, { 
+                visibleDialogRename: !!action.value
             });
         case 'SET_FILE_UPLOAD_LIST':
             return Object.assign({}, state, {

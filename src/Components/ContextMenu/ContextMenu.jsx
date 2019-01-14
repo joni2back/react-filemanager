@@ -8,6 +8,7 @@ import RemoveAction from './ContextMenuActions/RemoveAction.jsx';
 import MoveAction from './ContextMenuActions/MoveAction.jsx';
 import CopyAction from './ContextMenuActions/CopyAction.jsx';
 import EditAction from './ContextMenuActions/EditAction.jsx';
+import RenameAction from './ContextMenuActions/RenameAction.jsx';
 import DownloadAction from './ContextMenuActions/DownloadAction.jsx';
 
 class ContextMenu extends Component {
@@ -27,6 +28,9 @@ class ContextMenu extends Component {
             }            
             if (act === 'move') {
                 component = <MoveAction key={key} />;
+            }
+            if (act === 'rename') {
+                component = <RenameAction key={key} />;
             }
             if (act === 'download') {
                 component = <DownloadAction key={key} />;

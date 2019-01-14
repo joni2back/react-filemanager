@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
-import { setVisibleModalFileEdit } from '../../../Actions/Actions.js';
+import { setVisibleDialogEdit } from '../../../Actions/Actions.js';
 
 class FormDialog extends Component {
 
@@ -71,7 +71,7 @@ class FormDialog extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.visibleModalFileEdit,
+        open: state.visibleDialogEdit,
         blobUrl: state.fileContentBlobUrl
     };
 };
@@ -79,10 +79,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: (event) => {
-            dispatch(setVisibleModalFileEdit(false));
+            dispatch(setVisibleDialogEdit(false));
         },
         handleOpen: (event) => {
-            dispatch(setVisibleModalFileEdit(true));
+            dispatch(setVisibleDialogEdit(true));
         },
         handleSave: (event) => {
         }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { initSubList, setVisibleModalCopyFile } from '../../../Actions/Actions.js';
+import { initSubList, setVisibleDialogCopy } from '../../../Actions/Actions.js';
 
 function CopyAction(props) {
     const {handleClick, selectedFiles} = props;
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event, selectedFiles) => {
             dispatch(initSubList());
-            dispatch(setVisibleModalCopyFile(true));
+            dispatch(setVisibleDialogCopy(true));
         }
     };
 };

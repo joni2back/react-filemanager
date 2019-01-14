@@ -1,7 +1,4 @@
-import { 
-    getFileList, createFolder, getFileBody, removeFile, moveFile, copyFile, uploadFiles as upload
-} from '../Api/ApiHandler.js';
-
+import * as APIHandler from '../Api/ApiHandler.js';
 
 /**
  * Request API to get file list for the selected path then refresh UI
@@ -13,7 +10,7 @@ export const uploadFiles = (fileList) => (dispatch, getState) => {
     dispatch(setSelectedFiles([]));
     dispatch(setFileUploadProgress(50));
 
-    upload(path.join('/'), fileList).then(r => {
+    APIHandler.uploadFiles(path.join('/'), fileList).then(r => {
         dispatch(setFileUploadProgress(100));
         setTimeout(f => {
             dispatch(resetFileUploader());
@@ -37,7 +34,7 @@ export const refreshFileList = () => (dispatch, getState) => {
     dispatch(setLoading(true));
     dispatch(setSelectedFiles([]));
 
-    getFileList(path.join('/')).then(r => {
+    APIHandler.getFileList(path.join('/')).then(r => {
         dispatch(setLoading(false));
         dispatch(setFileList(r));
     }).catch(r => {
@@ -60,7 +57,7 @@ export const refreshFileListSublist = () => (dispatch, getState) => {
     dispatch(setLoadingSublist(true));
     dispatch(setSelectedFolderSublist(null));
 
-    getFileList(pathSublist.join('/')).then(r => {
+    APIHandler.getFileList(pathSublist.join('/')).then(r => {
         dispatch(setLoadingSublist(false));
         dispatch(setFileListSublist(r));
     }).catch(r => {
@@ -84,8 +81,8 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
 
     dispatch(setLoading(true));
     dispatch(setFileContent(null));
-    dispatch(setVisibleModalFileContent(true));
-    getFileBody(path.join('/'), fileName).then(blob => {
+    dispatch(setVisibleDialogContent(true));
+    APIHandler.getFileBody(path.join('/'), fileName).then(blob => {
         dispatch(setFileContent(blob));
         dispatch(setLoading(false));
     }).catch(r => {
@@ -97,6 +94,26 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
     });
 };
 
+/**
+ * Request API to rename file then dispatch defined events
+ * @param {String} fileName
+ * @returns {Function}
+ */
+export const renameItem = (fileName, newFileName) => (dispatch, getState) => {
+    const { path } = getState();
+    dispatch(setLoading(true));
+    APIHandler.renameItem(path.join('/'), fileName, newFileName).then(blob => {
+        dispatch(setVisibleDialogRename(false));
+        dispatch(setLoading(false));
+        dispatch(refreshFileList());
+    }).catch(r => {
+        dispatch({
+            type: 'SET_ERROR_MSG',
+            value: r.toString()
+        });
+        dispatch(setLoading(false));
+    });
+};
 
 /**
  * Request API to get download file then dispatch defined events
@@ -106,7 +123,7 @@ export const getFileContent = (fileName) => (dispatch, getState) => {
 export const downloadFile = (fileName) => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
-    getFileBody(path.join('/'), fileName).then(blob => {
+    APIHandler.getFileBody(path.join('/'), fileName).then(blob => {
         // TODO workaround large files disables ui for long time
         const blobUrl = window.URL.createObjectURL(blob);
         let tempLink = window.document.createElement('a');
@@ -131,11 +148,10 @@ export const downloadFile = (fileName) => (dispatch, getState) => {
  */
 export const getFileContentForEdit = (fileName) => (dispatch, getState) => {
     const { path } = getState();
-
     dispatch(setLoading(true));
     dispatch(setFileContent(null));
-    dispatch(setVisibleModalFileEdit(true));
-    getFileBody(path.join('/'), fileName).then(blob => {
+    dispatch(setVisibleDialogEdit(true));
+    APIHandler.getFileBody(path.join('/'), fileName).then(blob => {
         dispatch(setFileContent(blob));
         dispatch(setLoading(false));
     }).catch(r => {
@@ -157,8 +173,8 @@ export const createNewFolder = (createFolderName) => (dispatch, getState) => {
     const { path } = getState();
     dispatch(setLoading(true));
 
-    createFolder(path.join('/'), createFolderName).then(r => {
-        dispatch(setVisibleModalCreateFolder(false));
+    APIHandler.createFolder(path.join('/'), createFolderName).then(r => {
+        dispatch(setVisibleDialogCreateFolder(false));
         dispatch(setLoading(false));
         dispatch(refreshFileList());
     }).catch(r => {
@@ -181,7 +197,7 @@ export const removeItems = (files) => (dispatch, getState) => {
     const filenames = files.map(f => f.name);
 
     dispatch(setLoading(true));
-    removeFile(path.join('/'), filenames).then(r => {
+    APIHandler.removeItems(path.join('/'), filenames).then(r => {
         dispatch(setLoading(false));
         dispatch(refreshFileList());
     }).catch(r => {
@@ -205,9 +221,9 @@ export const moveItems = (files) => (dispatch, getState) => {
     const filenames = files.map(f => f.name);
 
     dispatch(setLoading(true));
-    moveFile(path.join('/'), destination, filenames).then(r => {
+    APIHandler.moveItems(path.join('/'), destination, filenames).then(r => {
         dispatch(setLoading(false));
-        dispatch(setVisibleModalMoveFile(false));
+        dispatch(setVisibleDialogMove(false));
         dispatch(refreshFileList());
     }).catch(r => {
         dispatch({
@@ -230,9 +246,9 @@ export const copyItems = (files) => (dispatch, getState) => {
     const filenames = files.map(f => f.name);
 
     dispatch(setLoading(true));
-    copyFile(path.join('/'), destination, filenames).then(r => {
+    APIHandler.copyItems(path.join('/'), destination, filenames).then(r => {
         dispatch(setLoading(false));
-        dispatch(setVisibleModalCopyFile(false));
+        dispatch(setVisibleDialogCopy(false));
         dispatch(refreshFileList());
     }).catch(r => {
         dispatch({
@@ -282,7 +298,7 @@ export const initSubList = () => (dispatch, getState) => {
 
 export const resetFileUploader = () => (dispatch, getState) => {
     dispatch(setFileUploadProgress(0));
-    dispatch(setVisibleModalUploadFile(false));
+    dispatch(setVisibleDialogUploadFile(false));
     dispatch(setFileUploadList([]));
 };
 
@@ -422,44 +438,51 @@ export const setLoadingSublist = (value) => {
     };
 };
 
-export const setVisibleModalCreateFolder = (visible) => {
+export const setVisibleDialogCreateFolder = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_CREATE_FOLDER',
+        type: 'SET_VISIBLE_DIALOG_CREATE_FOLDER',
         value: !!visible
     };
 };
 
-export const setVisibleModalUploadFile = (visible) => {
+export const setVisibleDialogUploadFile = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_UPLOAD_FILE',
+        type: 'SET_VISIBLE_DIALOG_UPLOAD_FILE',
         value: !!visible
     };
 };
 
-export const setVisibleModalMoveFile = (visible) => {
+export const setVisibleDialogRename = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_MOVE_FILE',
+        type: 'SET_VISIBLE_DIALOG_RENAME',
         value: !!visible
     };
 };
 
-export const setVisibleModalCopyFile = (visible) => {
+export const setVisibleDialogMove = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_COPY_FILE',
+        type: 'SET_VISIBLE_DIALOG_MOVE',
         value: !!visible
     };
 };
 
-export const setVisibleModalFileContent = (visible) => {
+export const setVisibleDialogCopy = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_FILE_CONTENT',
+        type: 'SET_VISIBLE_DIALOG_COPY',
         value: !!visible
     };
 };
 
-export const setVisibleModalFileEdit = (visible) => {
+export const setVisibleDialogContent = (visible) => {
     return {
-        type: 'SET_VISIBLE_MODAL_FILE_EDIT',
+        type: 'SET_VISIBLE_DIALOG_CONTENT',
+        value: !!visible
+    };
+};
+
+export const setVisibleDialogEdit = (visible) => {
+    return {
+        type: 'SET_VISIBLE_DIALOG_EDIT',
         value: !!visible
     };
 };

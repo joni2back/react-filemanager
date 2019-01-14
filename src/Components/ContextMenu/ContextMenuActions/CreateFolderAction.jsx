@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
-import { setVisibleModalCreateFolder } from '../../../Actions/Actions.js';
+import { setVisibleDialogCreateFolder } from '../../../Actions/Actions.js';
 
 function CreateFolderAction(props) {
     const {handleClick, handleClose} = props;
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event) => {
-            dispatch(setVisibleModalCreateFolder(true));
+            dispatch(setVisibleDialogCreateFolder(true));
         }
     };
 };

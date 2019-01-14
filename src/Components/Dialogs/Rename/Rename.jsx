@@ -6,25 +6,42 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
-import { createNewFolder, setVisibleDialogCreateFolder } from '../../../Actions/Actions.js';
+import { renameItem, setVisibleDialogRename } from '../../../Actions/Actions.js';
 
 class FormDialog extends Component {
 
+    state = {
+        value: ''
+    };
+
+    componentWillReceiveProps (props) {
+        this.setState({value: props.realName});
+    }
+
+    handleChange (event) {
+        this.setState({value: event.currentTarget.form.querySelector('input').value});
+    }
+
+    handleSave (event) {
+        this.props.handleSave(event)(this.props.realName, this.state.value);
+    }
+
     render() {
-        const { handleClose, handleSave, value, open } = this.props;
+        const { value } = this.state;
+        const { handleClose, open } = this.props;
 
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-create-folder" fullWidth={true} maxWidth={'sm'}>
                 <form>
-                  <DialogTitle id="form-dialog-create-folder">Create folder</DialogTitle>
+                  <DialogTitle id="form-dialog-create-folder">Rename</DialogTitle>
                   <DialogContent>
-                    <TextField autoFocus fullWidth margin="dense" label="Folder name" type="text" value={value} />
+                    <TextField autoFocus fullWidth margin="dense" label="Item name" type="text" onChange={this.handleChange.bind(this)} value={value} />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} color="primary" type="button">
                       Cancel
                     </Button>
-                    <Button color="primary" type="submit" onClick={handleSave}>
+                    <Button color="primary" type="submit" onClick={this.handleSave.bind(this)}>
                       Save
                     </Button>
                   </DialogActions>
@@ -36,20 +53,19 @@ class FormDialog extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        createFolderName: state.createFolderName,
-        open: state.visibleDialogCreateFolder
+        open: state.visibleDialogRename,
+        realName: state.selectedFiles.length ? state.selectedFiles[0].name : ''
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClose: event => {
-            dispatch(setVisibleDialogCreateFolder(false));
+            dispatch(setVisibleDialogRename(false));
         },
-        handleSave: event => {
+        handleSave: event => (realName, newName) => {
             event.preventDefault();
-            const folderName = event.currentTarget.form.querySelector('input').value;
-            dispatch(createNewFolder(folderName));
+            dispatch(renameItem(realName, newName));
         }
     };
 };

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { setVisibleModalUploadFile } from '../../../Actions/Actions.js';
+import { setVisibleDialogUploadFile } from '../../../Actions/Actions.js';
 
 function UploadFileAction(props) {
     const {handleClick, handleClose} = props;
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         handleClick: (event) => {
-            dispatch(setVisibleModalUploadFile(true));
+            dispatch(setVisibleDialogUploadFile(true));
         }
     };
 };

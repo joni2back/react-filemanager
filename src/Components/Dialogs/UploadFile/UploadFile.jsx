@@ -40,7 +40,7 @@ class FormDialog extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.visibleModalUploadFile,
+        open: state.visibleDialogUploadFile,
         canUpload: state.fileUploadList.length,
         fileUploadList: state.fileUploadList,
         fileUploadProgress: state.fileUploadProgress
