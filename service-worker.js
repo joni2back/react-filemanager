@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/joni2back/react-filemanager/precache-manifest.a8c1ca90af9aa1c7478459bf20ecc8ee.js"
+  "/react-filemanager/precache-manifest.d3ff11b489f7af15d9cbc16b78983141.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/joni2back/react-filemanager/index.html", {
+workbox.routing.registerNavigationRoute("/react-filemanager/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
