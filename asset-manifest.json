@@ -1,13 +1,13 @@
 {
   "main.css": "/react-filemanager/static/css/main.61ea0d87.chunk.css",
-  "main.js": "/react-filemanager/static/js/main.451d9caf.chunk.js",
-  "main.js.map": "/react-filemanager/static/js/main.451d9caf.chunk.js.map",
+  "main.js": "/react-filemanager/static/js/main.65796f32.chunk.js",
+  "main.js.map": "/react-filemanager/static/js/main.65796f32.chunk.js.map",
   "static/js/1.be4011e5.chunk.js": "/react-filemanager/static/js/1.be4011e5.chunk.js",
   "static/js/1.be4011e5.chunk.js.map": "/react-filemanager/static/js/1.be4011e5.chunk.js.map",
   "runtime~main.js": "/react-filemanager/static/js/runtime~main.5c124bc8.js",
   "runtime~main.js.map": "/react-filemanager/static/js/runtime~main.5c124bc8.js.map",
   "static/css/main.61ea0d87.chunk.css.map": "/react-filemanager/static/css/main.61ea0d87.chunk.css.map",
   "index.html": "/react-filemanager/index.html",
-  "precache-manifest.5003f6ad5717f6e96d00168de806dd47.js": "/react-filemanager/precache-manifest.5003f6ad5717f6e96d00168de806dd47.js",
+  "precache-manifest.11fcad8e4ae3fdfc3b3561bb2d06849a.js": "/react-filemanager/precache-manifest.11fcad8e4ae3fdfc3b3561bb2d06849a.js",
   "service-worker.js": "/react-filemanager/service-worker.js"
 }
